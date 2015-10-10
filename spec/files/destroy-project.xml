@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<omnifocus xmlns="http://www.omnigroup.com/namespace/OmniFocus/v1" app-id="com.omnigroup.OmniFocus2" app-version="96.9.0.239932" os-name="Mac OS X" os-version="10.10.4" machine-model="MacBookPro9,2">
+	<task id="abc" op="delete" />
+</omnifocus>

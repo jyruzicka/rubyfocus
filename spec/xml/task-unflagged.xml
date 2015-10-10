@@ -1,0 +1,7 @@
+<task id="abcd12345">
+    <task idref="abcdef12345"/>
+    <added>2013-06-03T07:11:05.133Z</added>
+    <modified>2013-06-03T07:23:10.058Z</modified>
+    <name>Sample unstarred task</name>
+    <rank>0</rank>
+</task>

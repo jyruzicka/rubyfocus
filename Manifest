@@ -1,0 +1,33 @@
+# INCLUDE bin/**/*
+# INCLUDE lib/**/*
+# INCLUDE *
+# EXCLUDE **/.DS_Store
+# EXCLUDE .rarity
+# EXCLUDE stage_ofocus.rb
+# EXCLUDE spec/files/ofocus_staging
+
+.rspec
+lib/rubyfocus.rb
+lib/rubyfocus/document.rb
+lib/rubyfocus/fetchers/fetcher.rb
+lib/rubyfocus/fetchers/local_fetcher.rb
+lib/rubyfocus/includes/conditional_exec.rb
+lib/rubyfocus/includes/idref.rb
+lib/rubyfocus/includes/parser.rb
+lib/rubyfocus/includes/searchable.rb
+lib/rubyfocus/items/context.rb
+lib/rubyfocus/items/folder.rb
+lib/rubyfocus/items/item.rb
+lib/rubyfocus/items/named_item.rb
+lib/rubyfocus/items/project.rb
+lib/rubyfocus/items/ranked_item.rb
+lib/rubyfocus/items/setting.rb
+lib/rubyfocus/items/task.rb
+lib/rubyfocus/location.rb
+lib/rubyfocus/patch.rb
+lib/rubyfocus/review_period.rb
+lib/rubyfocus/xml_translator.rb
+Manifest
+README.md
+rubyfocus.gemspec
+version.txt

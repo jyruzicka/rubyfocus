@@ -1,0 +1,16 @@
+ <task id="eSjFbUNpBtt">
+  <project>
+    <folder idref="jaREIa4YkBB"/>
+    <last-review>2014-04-12T23:44:35.307Z</last-review>
+    <review-interval>~3m</review-interval>
+    <status>inactive</status>
+  </project>
+  <added>2012-12-18T20:04:01.873Z</added>
+  <modified>2014-04-12T23:44:35.342Z</modified>
+  <name>Write for 1klb - $POSTNAME</name>
+  <note>
+    <text><p><run><style><value key="paragraph-alignment">left</value></style><lit>$POSTNAME</lit></run></p><p><run><style><value key="paragraph-alignment">left</value></style><lit>&gt;&gt;&gt;Writing</lit></run></p></text>
+  </note>
+  <rank>-2122317824</rank>
+  <completed-by-children>true</completed-by-children>
+</task>

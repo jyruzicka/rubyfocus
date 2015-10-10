@@ -1,0 +1,13 @@
+<task id="lzlCG03jprK">
+  <project>
+    <folder idref="lZkC2HwceOc"/>
+    <singleton>true</singleton>
+    <last-review>2014-02-02T22:57:41.000Z</last-review>
+    <review-interval>~3m</review-interval>
+  </project>
+  <added>2012-04-11T21:20:06.399Z</added>
+  <modified>2014-04-22T21:49:51.931Z</modified>
+  <name>Home recurring tasks</name>
+  <rank>-2145789795</rank>
+  <order>parallel</order>
+</task>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<omnifocus xmlns="http://www.omnigroup.com/namespace/OmniFocus/v1" app-id="com.omnigroup.OmniFocus2" app-version="96.9.0.239932" os-name="Mac OS X" os-version="10.10.4" machine-model="MacBookPro9,2">
+	<task id="12345">
+		<name>Sample task</name>
+		<rank>0</rank>
+		<added>2015-08-30T16:58:34.312Z</added>
+		<modified>2015-08-30T16:58:34.312Z</modified>
+	</task>
+	<task id="abcde">
+		<project>
+			<review-interval>4d</review-interval>
+		</project>
+		<name>Sample project</name>
+		<rank>0</rank>
+		<added>2015-08-30T16:58:34.312Z</added>
+		<modified>2015-08-30T16:58:34.312Z</modified>
+	</task>
+	<context id="12csf">
+		<name>Sample context</name>
+		<rank>0</rank>
+		<added>2015-08-30T16:58:34.312Z</added>
+		<modified>2015-08-30T16:58:34.312Z</modified>
+	</context>
+</omnifocus>

@@ -1,0 +1,12 @@
+<task id="cKlnbP5CjMQ">
+    <task idref="dMvuhNoPpG4"/>
+    <added>2013-07-25T21:34:10.743Z</added>
+    <modified>2013-07-25T21:38:39.887Z</modified>
+    <name>Start preparation for mum&apos;s birthday</name>
+    <rank>0</rank>
+    <context idref="oiHHWDl5Fuv"/>
+    <start>2014-06-21T12:00:00.000Z</start>
+    <repeat>@1y</repeat>
+    <repetition-rule>FREQ=YEARLY</repetition-rule>
+    <repetition-method>fixed</repetition-method>
+</task>

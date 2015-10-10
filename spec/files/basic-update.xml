@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<omnifocus xmlns="http://www.omnigroup.com/namespace/OmniFocus/v1" app-id="com.omnigroup.OmniFocus2" app-version="96.9.0.239932" os-name="Mac OS X" os-version="10.10.4" machine-model="MacBookPro9,2">
+	<task id="12345" op="update">
+	</task>
+	<task id="abcde" op="update">
+		<project>
+		</project>
+	</task>
+	<folder id="12csf">
+	</folder>
+	<task id="098cf" op="delete" />
+	<task id="098cf" op="delete" />
+	<task id="098cf" op="delete" />
+</omnifocus>

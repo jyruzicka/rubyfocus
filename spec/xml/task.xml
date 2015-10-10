@@ -1,0 +1,15 @@
+<task id="h0-L40WzHLv">
+    <task idref="agkBVCwMAp1"/>
+    <added>2013-06-03T07:11:05.133Z</added>
+    <modified>2013-06-03T07:23:10.058Z</modified>
+    <name>Plan Chapter $CHAPNUM</name>
+    <note>
+      <text>Sample text goes here.</text>
+    </note>
+    <rank>0</rank>
+    <context idref="oiHHWDl5Fuv"/>
+    <flagged>true</flagged>
+    <order>parallel</order>
+    <start>2014-01-01T0:00:00.000Z</start>
+    <due>2014-02-01T0:00:00.000Z</due>
+</task>

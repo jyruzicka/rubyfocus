@@ -1,0 +1,18 @@
+<task id="gpG7NzF4x_h">
+  <project>
+    <folder idref="fu1Zv9RhFnO"/>
+    <last-review>2014-02-02T22:57:37.800Z</last-review>
+    <review-interval>~3m</review-interval>
+  </project>
+  <added>2013-08-12T22:09:18.554Z</added>
+  <modified>2014-02-02T22:57:38.147Z</modified>
+  <name>Father&apos;s Day</name>
+  <rank>331350016</rank>
+  <context idref="oiHHWDl5Fuv"/>
+  <start>2014-07-12T12:00:00.000Z</start>
+  <due>2014-08-20T05:00:00.000Z</due>
+  <repeat>~11(s)m</repeat>
+  <completed-by-children>true</completed-by-children>
+  <repetition-rule>FREQ=MONTHLY;INTERVAL=11</repetition-rule>
+  <repetition-method>start-after-completion</repetition-method>
+</task>
