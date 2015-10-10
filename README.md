@@ -8,12 +8,12 @@ Rubyfocus is a ruby gem. It's not currently hosted on rubygems, though, so you'l
 
 First download rubyfocus to your computer:
 
-	git clone https://github.com/jyruzicka/rubyfocus.git
+  git clone https://github.com/jyruzicka/rubyfocus.git
 
 Now build and install it!
 
-	gem build rubyfocus.gemspec
-	gem install rubyfocus-0.1.0.gem
+  gem build rubyfocus.gemspec
+  gem install rubyfocus-0.1.0.gem
 
 # Usage
 
@@ -27,9 +27,9 @@ require "rubyfocus"
 f = Rubyfocus::LocalFetcher.new # This class lets you access a local OmniFocus install
 d = Rubyfocus::Document.new(f)  # This is how we create a document linked up to a local fetcher
 
-d.update 												# This is how we get the document to update using its built-in fetcher
+d.update                        # This is how we get the document to update using its built-in fetcher
 
-d.save("ofocus.yml")						# Save the whole database to yaml!
+d.save("ofocus.yml")            # Save the whole database to yaml!
 ```
 
 To open it up again, it's even easier:
@@ -37,8 +37,8 @@ To open it up again, it's even easier:
 ```ruby
 require "rubyfocus"
 
-d = Rubyfocus::Document.load_from_file("ofocus.yml") 	# Your document will remember everything
-d.update 																							# Updates it against the local cache, in case you made changes
+d = Rubyfocus::Document.load_from_file("ofocus.yml")   # Your document will remember everything
+d.update                                               # Updates it against the local cache, in case you made changes
 ```
 
 ## Grabbing data
