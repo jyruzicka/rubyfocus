@@ -8,12 +8,16 @@ Rubyfocus is a ruby gem. It's not currently hosted on rubygems, though, so you'l
 
 First download rubyfocus to your computer:
 
-  git clone https://github.com/jyruzicka/rubyfocus.git
+```
+git clone https://github.com/jyruzicka/rubyfocus.git
+```
 
 Now build and install it!
 
-  gem build rubyfocus.gemspec
-  gem install rubyfocus-0.1.0.gem
+```
+gem build rubyfocus.gemspec
+gem install rubyfocus-0.1.0.gem
+```
 
 # Usage
 
