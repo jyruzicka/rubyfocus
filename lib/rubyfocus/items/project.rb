@@ -20,10 +20,6 @@ class Rubyfocus::Project < Rubyfocus::Task
 	# When did we last review the project?
 	attr_accessor :last_review
 
-	# How do tasks become available? By default, projects are :sequential, but they can
-	# also be :parallel
-	attr_accessor :order
-
 	# What's the status of the project? Valid options: :active, :inactive, :done. Default
 	# is :active
 	attr_accessor :status
@@ -67,4 +63,14 @@ class Rubyfocus::Project < Rubyfocus::Task
 	def completed?; status == :done; end
 	def dropped?; status == :dropped; end
 
+	#---------------------------------------
+	# Convert to a task
+	def to_task
+		t = Rubyfocus::Task.new(self.document)
+		instance_variables.each do |ivar|
+			setter = ivar.to_s.gsub(/^@/,"") + "="
+			t.send(setter, self.instance_variable_get(ivar))	if t.respond_to?(setter)
+		end
+		t
+	end
 end

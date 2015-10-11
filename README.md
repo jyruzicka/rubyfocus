@@ -92,3 +92,14 @@ Other goals include:
 
 * Updating via the [Omni Sync Server](https://manage.sync.omnigroup.com/) rather than relying on local files.
 * A couple of example projects using rubyfocus
+
+# History
+
+## 0.2.0 // 2015-10-11
+
+* [Bugfix] Will now turn tasks into projects and projects into tasks if the user has done this in OmniFocus.
+* [Bugfix] Rubyfocus::Patch now does patch application, rather than delegating to the Fetcher.
+
+## 0.1.0 // 2015-10-10
+
+* Hello, world!

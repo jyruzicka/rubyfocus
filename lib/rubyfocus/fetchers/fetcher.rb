@@ -12,6 +12,12 @@
 # +Document#update+ will automatically send the fetcher the document.
 
 class Rubyfocus::Fetcher
+
+	# This method is called when loading a fetcher from YAML
+	def init_with(coder)
+		raise RuntimeError, "Method Fetcher#init_with called for abstract class Fetcher"
+	end
+	
 	# Returns the content of the base file
 	def base
 		raise RuntimeError, "Method Fetcher#base called for abstract class Fetcher."
@@ -44,7 +50,7 @@ class Rubyfocus::Fetcher
 	def update_once(document)
 		np = self.next_patch(document)
 		if np
-			apply_patch(np, document)
+			np.apply_to(document)
 		else
 			raise RuntimeError, "Patcher#update_once called, but I can't find a patch to apply!"
 		end
@@ -62,39 +68,11 @@ class Rubyfocus::Fetcher
 		return all_possible_patches.sort_by(&:time).last
 	end
 
-	# Actually apply a patch to the document.
-	# Raises a RuntimeError if you try to apply an illegal patch (i.e. from_id
-	# and document.patch_id don't match).
-	def apply_patch(patch, document)
-		if !patch.from_ids.include?(document.patch_id)
-			raise RuntimeError, "Patch ID mismatch (patch from_ids: [#{patch.from_ids.join(", ")}], document.patch_id: #{document.patch_id}"
-		end
 
-		# Go through, apply updates, creates, and deletes
-
-		# Updates modify elements
-		patch.update.each do |node|
-			elem = document[node["id"]]
-			elem.apply_xml(node) if elem
-		end
-
-		# Deletes remove elements
-		patch.delete.each do |node|
-			document.remove_element(node["id"])
-		end
-
-		# Creates make new elements
-		patch.create.each do |node|
-			element = Rubyfocus::Parser.parse(nil, node)
-			if element
-				document.add_element element
-			else
-				raise RuntimeError, "Encountered unparsable XML during patch reading: #{node}."
-			end
-		end
-
-		# Modify current patch_id to show new value
-		document.patch_id = patch.to_id
+	#---------------------------------------
+	# Serialisation info
+	def encode_with(coder)
+		raise RuntimeError, "Fetcher#encode_with called on abstract class."
 	end
 
 	# Remove all cached information

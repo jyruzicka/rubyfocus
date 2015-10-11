@@ -108,6 +108,19 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 		container && (container.order == :sequential) && (container.next_available_task != self)
 	end
 
+	#---------------------------------------
+	# Conversion methods
+
+	# Convert the task to a project
+	def to_project
+		p = Rubyfocus::Project.new(self.document)
+		instance_variables.each do |ivar|
+			setter = ivar.to_s.gsub(/^@/,"") + "="
+			p.send(setter, self.instance_variable_get(ivar))	if p.respond_to?(setter)
+		end
+		p
+	end
+
 	private
 	def inspect_properties
 		super + %w(note container_id context_id order flagged start due completed)

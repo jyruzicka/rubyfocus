@@ -81,7 +81,6 @@ class Rubyfocus::Document
 	def apply_xml(doc)
 		doc.root.children.select{ |e| !e.text? }.each do |node|
 			elem = Rubyfocus::Parser.parse(self, node)
-			# add_element(elem) if elem #Item.new does the adding
 		end
 	end
 
@@ -98,22 +97,23 @@ class Rubyfocus::Document
 	private :ivar_for
 
 	# Add an element. Element should be a Project, Task, Context, Folder, or Setting
+	# We assume whoever does this will set document appropriately on the element
 	def add_element(e)
 		dest = ivar_for(e)
 		if dest
-			e.document = self
 			dest << e
 		else
 			raise ArgumentError, "You passed a #{e.class} to Document#add_element - I don't know what to do with this."
 		end
 	end
 
-	# Remove an element from the 
+	# Remove an element from the document.
+	# We assume whoever does this is smart enough to also set the element's #document value
+	# to nil
 	def remove_element(e)
 		e = self[e] if e.is_a?(String)
 		return if e.nil?
 
-		e.document = nil
 		dest = ivar_for(e)
 		if dest
 			dest.delete(e)

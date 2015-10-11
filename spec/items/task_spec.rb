@@ -126,4 +126,19 @@ describe Rubyfocus::Task do
 	    expect(@p.actionable_tasks).to_not include(@t2)
 	  end
 	end
+
+	#---------------------------------------
+	# Conversion methods
+	#---------------------------------------
+	# Testing conversion of projects to tasks
+	describe "#to_project" do
+	  it "should return a project with all appropriate methods" do
+	  	now = Time.now
+	    t = Rubyfocus::Task.new(nil, {name: "Sample task", flagged: true, start: now})
+	    p = t.to_project
+	    expect(p.name).to eq("Sample task")
+	    expect(p.start).to eq(now)
+	    expect(p.flagged).to be true
+	  end
+	end
 end

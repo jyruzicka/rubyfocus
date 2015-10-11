@@ -1,7 +1,18 @@
 class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
+	# This is where the files are usually stored
 	LOCATION = File.join(ENV["HOME"], "/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Application Support/OmniFocus/OmniFocus.ofocus")
 
-	# Override parent method
+	#---------------------------------------
+	# Parent method overrides
+
+	# Init from yaml
+	def init_with(coder)
+		if coder["location"]
+			@location = coder["location"]
+		end
+	end
+
+	# Fetches the contents of the base file
 	def base
 		@base ||= begin
 			zip_file = Dir[File.join(self.location,"*.zip")].first
@@ -13,6 +24,7 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 		end
 	end
 
+	# Fetches the ID Of the base file
 	def base_id
 		base_file = File.basename(Dir[File.join(self.location,"*.zip")].first)
 		if base_file =~ /^\d+\=.*\+(.*)\.zip$/
@@ -22,11 +34,12 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 		end
 	end
 
-	# Override parent method
+	# Fetches a list of every patch file
 	def patches
 		@patches ||= Dir[File.join(self.location, "*.zip")][1..-1].map{ |f| Rubyfocus::Patch.new(self, File.basename(f)) }
 	end
 
+	# Fetches the contents of a given patch file
 	def patch(file)
 		filename = File.join(self.location, file)
 		if File.exists?(filename)
@@ -36,7 +49,13 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 		end
 	end
 
-	# Location methods
+	# Save to disk
+	def encode_with(coder)
+		coder.map = {"location" => @location}
+	end
+
+	#---------------------------------------
+	# Location file setters and getters
 	def location
 		@location || LOCATION
 	end

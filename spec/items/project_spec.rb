@@ -104,4 +104,15 @@ describe Rubyfocus::Project do
 		  expect(@p).to_not be_dropped
 		end
 	end
+
+	#---------------------------------------
+	# Testing conversion of projects to tasks
+	describe "#to_task" do
+	  it "should return a task with all appropriate methods" do
+	    p = Rubyfocus::Project.new(nil, {name: "Sample project", flagged: true, status: :active})
+	    t = p.to_task
+	    expect(t.name).to eq("Sample project")
+	    expect(t.flagged).to be true
+	  end
+	end
 end

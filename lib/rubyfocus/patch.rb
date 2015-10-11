@@ -72,7 +72,60 @@ class Rubyfocus::Patch
 	def delete; load_data; @delete; end
 	def create; load_data; @create; end
 
+	# Apply this patch to a document. Check to make sure ids match
+	def apply_to(document)
+		if !self.from_ids.include?(document.patch_id)
+			raise RuntimeError, "Patch ID mismatch (patch from_ids: [#{self.from_ids.join(", ")}], document.patch_id: #{document.patch_id}"
+		else
+			apply_to!(document)
+		end
+	end
+
+	# Apply this patch to a document. Who needs error checking amirite?
+	def apply_to!(document)
+		# Updates modify elements
+		self.update.each do |node|
+			elem = document[node["id"]]
+
+			# Tasks can become projects and v.v.: check this.
+			if [Rubyfocus::Task, Rubyfocus::Project].include?(elem.class)
+				should_be_project = (node.at_xpath("xmlns:project") != nil)
+				if (elem.class == Rubyfocus::Project) && !should_be_project
+					elem.document = nil # Remove this from current document
+					elem = elem.to_task # Convert to task
+					elem.document = document # Insert again!
+				elsif (elem.class == Rubyfocus::Task) && should_be_project
+					elem.document = nil # Remove this from current document
+					elem = elem.to_project # Convert to task
+					elem.document = document # Insert again!
+				end
+			end
+
+			elem.apply_xml(node) if elem
+		end
+
+		# Deletes remove elements
+		self.delete.each do |node|
+			document.remove_element(node["id"])
+		end
+
+		# Creates make new elements
+		self.create.each do |node|
+			if Rubyfocus::Parser.parse(document, node).nil?
+				raise RuntimeError, "Encountered unparsable XML during patch reading: #{node}."
+			end
+		end
+
+		# Modify current patch_id to show new value
+		document.patch_id = self.to_id
+	end
+
+	# String representation
 	def to_s
-		"(#{from_id} -> #{to_id})"
+		if from_ids.size == 1
+			"(#{from_ids.first} -> #{to_id})"
+		else
+			"([#{from_ids.join(", ")}] -> #{to_id})"
+		end
 	end
 end

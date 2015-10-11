@@ -13,10 +13,7 @@ class Rubyfocus::Item
 	attr_accessor :id, :added, :modified, :document
 
 	def initialize(document=nil, n=nil)
-		if document
-			self.document = document
-			document.add_element(self) 
-		end
+		self.document = document
 
 		case n
 		when Nokogiri::XML::Element
@@ -46,6 +43,14 @@ class Rubyfocus::Item
 
 	def to_serial
 		inspect_properties.each_with_object({}){ |s,hsh| hsh[s] = self.send(s) }
+	end
+
+	#---------------------------------------
+	# Document set/get methods
+	def document= d
+		@document.remove_element(self) if @document
+		@document = d
+		@document.add_element(self) if @document
 	end
 
 	#-------------------------------------------------------------------------------
