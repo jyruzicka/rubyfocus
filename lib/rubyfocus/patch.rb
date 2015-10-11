@@ -72,12 +72,17 @@ class Rubyfocus::Patch
 	def delete; load_data; @delete; end
 	def create; load_data; @create; end
 
+	# Can we apply this patch to a given document?
+	def can_patch?(document)
+		self.from_ids.include?(document.patch_id)
+	end
+
 	# Apply this patch to a document. Check to make sure ids match
 	def apply_to(document)
-		if !self.from_ids.include?(document.patch_id)
-			raise RuntimeError, "Patch ID mismatch (patch from_ids: [#{self.from_ids.join(", ")}], document.patch_id: #{document.patch_id}"
-		else
+		if can_patch?(document)
 			apply_to!(document)
+		else
+			raise RuntimeError, "Patch ID mismatch (patch from_ids: [#{self.from_ids.join(", ")}], document.patch_id: #{document.patch_id}"
 		end
 	end
 

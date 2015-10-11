@@ -64,7 +64,7 @@ class Rubyfocus::Fetcher
 	# Collect the next patch to the document. If more than one patch can be applied,
 	# apply the latest one.
 	def next_patch(document)
-		all_possible_patches = self.patches.select{ |patch| patch.from_ids.include?(document.patch_id) } # TODO spec new from_ids code
+		all_possible_patches = self.patches.select{ |patch| patch.can_patch?(document) }
 		return all_possible_patches.sort_by(&:time).last
 	end
 

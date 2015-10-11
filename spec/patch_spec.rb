@@ -25,6 +25,18 @@ describe Rubyfocus::Patch do
 	  end
 	end
 
+	describe "#can_patch?" do
+	  it "should return false if patch's from_ids don't include document's" do
+	    d = Rubyfocus::Document.new
+	    d.patch_id = "12345"
+
+	    p = Rubyfocus::Patch.new
+	    p.from_ids = ["abcdef"]
+
+	    expect(p.can_patch?(d)).to eq(false)
+	  end
+	end
+
 	describe "#apply_to" do
 	  it "should not run if patch and document ids don't match" do
 	    d = Rubyfocus::Document.new

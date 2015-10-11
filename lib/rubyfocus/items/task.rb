@@ -41,7 +41,6 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 	alias_method :flagged?, :flagged
 
 	# Collect all child tasks. If child tasks have their own subtasks, will instead fetch those.
-	# TODO Spec
 	def tasks
 		@tasks ||= if self.id.nil?
 			[]
@@ -60,10 +59,19 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 		end
 	end
 
+	# Collect only immediate tasks: I don't care about this subtasks malarky
+	def immediate_tasks
+		document.tasks.select(container_id: self.id)
+	end
+
 	# The first non-completed task, determined by order
-	# TODO Spec
 	def next_available_task
-		tasks.select{ |t| !t.completed? }.sort_by(&:rank).first
+		nat_candidate = immediate_tasks.select{ |t| !t.completed? }.sort_by(&:rank).first
+		if nat_candidate.has_subtasks?
+			nat_candidate.next_available_task
+		else
+			nat_candidate
+		end
 	end
 
 	# A list of all tasks that you can take action on. Actionable tasks
@@ -85,20 +93,17 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 		@incomplete_tasks ||= tasks.select{ |t| !t.completed? }
 	end
 
-
 	# Are there any tasks on this project which aren't completed?
 	def tasks_remain?
 		tasks.any?{ |t| t.completed.nil? }
 	end
 
 	# Does this task have any subtasks?
-	# TODO Spec
 	def has_subtasks?
 		tasks.size > 0
 	end
 
 	# Can we only start this task at some point in the future?
-	# TODO Spec
 	def deferred?
 		start && start > Time.now
 	end

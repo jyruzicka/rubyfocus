@@ -35,27 +35,97 @@ describe Rubyfocus::Task do
 	  end
 	end
 
-	describe "subtasks" do
-	  describe "#tasks" do
-	    it "should fetch sub-tasks" do
-	      @d = Rubyfocus::Document.new
-	      @t = Rubyfocus::Task.new(@d, id: "Sample")
-	      @t2 = Rubyfocus::Task.new(@d, container: @t)
+  describe "#tasks" do
+    it "should fetch sub-tasks" do
+      @d = Rubyfocus::Document.new
+      @t = Rubyfocus::Task.new(@d, id: "Sample")
+      @t2 = Rubyfocus::Task.new(@d, container: @t)
 
-	      expect(@t.tasks).to include(@t2)
-	    end
+      expect(@t.tasks).to include(@t2)
+    end
 
-	    it "should exclude sub-tasks that in turn have sub-tasks, but include their tasks" do
-	      @d = Rubyfocus::Document.new
-	      @t = Rubyfocus::Task.new(@d, id: "Sample")
-	      @t2 = Rubyfocus::Task.new(@d, container: @t, id: "subtask")
-	      @t3 = Rubyfocus::Task.new(@d, container: @t2)
+    it "should exclude sub-tasks that in turn have sub-tasks, but include their tasks" do
+      @d = Rubyfocus::Document.new
+      @t = Rubyfocus::Task.new(@d, id: "Sample")
+      @t2 = Rubyfocus::Task.new(@d, container: @t, id: "subtask")
+      @t3 = Rubyfocus::Task.new(@d, container: @t2)
 
-				expect(@t.tasks).to_not include(@t2)
-	      expect(@t.tasks).to include(@t3)
-	    end
-	  end
-	end
+			expect(@t.tasks).to_not include(@t2)
+      expect(@t.tasks).to include(@t3)
+    end
+  end
+
+  describe "#immediate_tasks" do
+    it "should fetch immediate sub-tasks" do
+      @d = Rubyfocus::Document.new
+      @t = Rubyfocus::Task.new(@d, id: "Sample")
+      @t2 = Rubyfocus::Task.new(@d, container: @t)
+
+      expect(@t.immediate_tasks).to include(@t2)
+    end
+
+    it "should include sub-tasks that in turn have sub-tasks, but exclude their tasks" do
+      @d = Rubyfocus::Document.new
+      @t = Rubyfocus::Task.new(@d, id: "Sample")
+      @t2 = Rubyfocus::Task.new(@d, container: @t, id: "subtask")
+      @t3 = Rubyfocus::Task.new(@d, container: @t2)
+
+			expect(@t.immediate_tasks).to include(@t2)
+      expect(@t.immediate_tasks).to_not include(@t3)
+    end
+  end
+
+  describe "#next_available_task" do
+    it "should fetch the next non-blocked task - simple case" do
+    	d = Rubyfocus::Document.new
+      p = Rubyfocus::Task.new(d, id: "12345")
+      t = Rubyfocus::Task.new(d, container: p, rank: 1)
+      t2 = Rubyfocus::Task.new(d, container: p, rank: 0)
+      expect(p.next_available_task).to eq(t2)
+    end
+
+    it "should fetch the next non-blocked task, even when it's buried" do
+      d = Rubyfocus::Document.new
+      p = Rubyfocus::Task.new(d, id: "12345")
+      t = Rubyfocus::Task.new(d, container: p, rank: 2)
+      t2 = Rubyfocus::Task.new(d, container: p, id: "abcde", rank: 1)
+      t3 = Rubyfocus::Task.new(d, container: t2, rank: 3)
+      
+
+      expect(p.next_available_task).to eq(t3)
+    end
+  end
+
+  describe "#has_subtasks?" do
+    it "should return false if a task has no subtasks" do
+      d = Rubyfocus::Document.new
+      t = Rubyfocus::Task.new(d,id: "12345")
+
+      expect(t.has_subtasks?).to eq(false)
+    end
+
+    it "should return true if a task has subtasks" do
+      d = Rubyfocus::Document.new
+      t = Rubyfocus::Task.new(d,id: "12345")
+      t2 = Rubyfocus::Task.new(d,container: t)
+
+      expect(t.has_subtasks?).to eq(true)
+    end
+  end
+
+  describe "#deferred?" do
+    it "should return false if task's start date is not set" do
+      expect(Rubyfocus::Task.new(nil)).to_not be_deferred
+    end
+
+    it "should return false if task's start date is set to the past" do
+      expect(Rubyfocus::Task.new(nil,start:Time.now-1)).to_not be_deferred
+    end
+
+    it "should return true if task's start date is set in the future" do
+      expect(Rubyfocus::Task.new(nil,start:Time.now+60)).to be_deferred
+    end
+  end
 
 	# Incomplete tasks are those which aren't completed
 	describe "#incomplete_tasks" do
