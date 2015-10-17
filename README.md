@@ -78,6 +78,18 @@ t.deferred? # => true/false
 t.start # => Time or nil
 ```
 
+## SyncServer-ing
+
+To access an instance of the [Omni Sync Server](http://sync.omnigroup.com), use an `OSSFetcher` object:
+
+```ruby
+f = Rubyfocus::OSSFetcher.new(my_username, my_password)
+d = Rubyfocus::Document.new(f)
+d.update
+```
+
+If you use the Omni Sync Server, you'll definitely want to save your data locally and just update what's necessary - it takes a while to download and apply all those files.
+
 # Behind the scenes
 
 OmniFocus stores its data as a "base" XML file plus a series of "patches". These are all stored as zip files inside an ".ofocus" package. This means that you can have several different devices, all storing the OmniFocus task database at different states, and each one can easily update its database by comparing the various patches against its own database and downloading/applying only what's needed.
@@ -94,6 +106,10 @@ Other goals include:
 * A couple of example projects using rubyfocus
 
 # History
+
+## 0.3.0 // 2015-10-17
+
+* [New] Now supports remote syncing with the Omni Sync Server!
 
 ## 0.2.0 // 2015-10-11
 

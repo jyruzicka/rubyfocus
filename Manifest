@@ -6,11 +6,13 @@
 # EXCLUDE stage_ofocus.rb
 # EXCLUDE spec/files/ofocus_staging
 
+.gitignore
 .rspec
 lib/rubyfocus.rb
 lib/rubyfocus/document.rb
 lib/rubyfocus/fetchers/fetcher.rb
 lib/rubyfocus/fetchers/local_fetcher.rb
+lib/rubyfocus/fetchers/oss_fetcher.rb
 lib/rubyfocus/includes/conditional_exec.rb
 lib/rubyfocus/includes/idref.rb
 lib/rubyfocus/includes/parser.rb
