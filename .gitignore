@@ -1,2 +1,4 @@
 .rarity
 pkg
+stage_ofocus.rb
+spec/files/ofocus_staging
