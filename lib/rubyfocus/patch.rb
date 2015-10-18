@@ -25,7 +25,6 @@ class Rubyfocus::Patch
 		@create = []
 		@delete = []
 
-		puts "Initializing patch with filename #{file}"
 		if file 
 			if File.basename(file) =~ /^(\d+)=(.*)\./
 				time_string = $1
