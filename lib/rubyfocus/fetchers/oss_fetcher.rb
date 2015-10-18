@@ -56,7 +56,6 @@ class Rubyfocus::OSSFetcher < Rubyfocus::Fetcher
 			table = response[/<table>(.*?)<\/table>/m,1]
 			if table
 				links = table.scan(/<a href="([^"]+)"/).flatten.select{ |f| f.end_with?(".zip") }
-				puts "Patches are #{links}"
 				links.map{ |u| Rubyfocus::Patch.new(self,u) }
 			else
 				[]
