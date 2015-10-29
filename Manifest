@@ -10,6 +10,7 @@
 .rspec
 lib/rubyfocus.rb
 lib/rubyfocus/document.rb
+lib/rubyfocus/errors.rb
 lib/rubyfocus/fetchers/fetcher.rb
 lib/rubyfocus/fetchers/local_fetcher.rb
 lib/rubyfocus/fetchers/oss_fetcher.rb

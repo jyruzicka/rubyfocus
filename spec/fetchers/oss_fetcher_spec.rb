@@ -39,8 +39,23 @@ describe Rubyfocus::OSSFetcher do
   end
 
   describe "#base_id" do
-    it "should return the id of the basse" do
+    it "should return the id of the base" do
       expect(base_fetcher.base_id).to eq("basefile")
+    end
+  end
+
+  describe "#patch" do
+    it "should retrieve and unzip a zipped file" do
+      # First, collect some zipped data
+      zip_file = Dir[File.join(file("basic.ofocus"),"*.zip")].first
+      zipped_data = File.read(zip_file)
+
+      r = double(body: zipped_data)
+      fetcher = double(get: r)
+
+      f = Rubyfocus::OSSFetcher.new("foo", "bar")
+      f.fetcher = fetcher
+      expect(f.patch("random")).to include(%|<?xml version="1.0" encoding="UTF-8" standalone="no"?>|)
     end
   end
 end

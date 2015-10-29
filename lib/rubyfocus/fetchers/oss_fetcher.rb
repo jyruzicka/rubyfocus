@@ -23,6 +23,7 @@ class Rubyfocus::OSSFetcher < Rubyfocus::Fetcher
 	def init_with(coder)
 		@username = coder["username"]
 		@password = coder["password"]
+		@fetcher = HTTParty
 	end
 
 	# Fetches the contents of the base file
@@ -30,7 +31,7 @@ class Rubyfocus::OSSFetcher < Rubyfocus::Fetcher
 		@base ||= if self.patches.size > 0
 			fetch_file(self.patches.first.file)
 		else
-			raise RuntimeError, "Rubyfocs::OSSFetcher looking for zip files at #{url}: none found."
+			raise Rubyfocus::OSSFetcherError, "Looking for zip files at #{url}: none found."
 		end
 	end
 
@@ -41,10 +42,10 @@ class Rubyfocus::OSSFetcher < Rubyfocus::Fetcher
 			if base_file.file =~ /^\d+\=.*\+(.*)\.zip$/
 				$1
 			else
-				raise RuntimeError, "Malformed patch file #{base_file}."
+				raise Rubyfocus::OSSFetcherError, "Malformed patch file #{base_file}."
 			end
 		else
-			raise RuntimeError, "Rubyfocs::OSSFetcher looking for zip files at #{url}: none found."
+			raise Rubyfocus::OSSFetcherError, "Looking for zip files at #{url}: none found."
 		end
 	end
 
@@ -90,10 +91,12 @@ class Rubyfocus::OSSFetcher < Rubyfocus::Fetcher
 	def fetch_file(f)
 		f = File.join(url,f)
 		data = self.fetcher.get(f, digest_auth: auth).body
-		# TODO Can you read directly from datastream?
-		t = Tempfile.new("rubyfocus")
-		t.write(data)
-		t.close
-		Zip::File.open(t.path){ |z| z.get_entry("contents.xml").get_input_stream.read }
+		io = StringIO.new(data)
+		Zip::InputStream.open(io) do |io|
+			while (entry = io.get_next_entry)
+				return io.read if entry.name == "contents.xml"
+			end
+			raise Rubyfocus::OSSFetcherError, "Malformed OmniFocus zip file #{zipfile}."
+		end
 	end
 end
