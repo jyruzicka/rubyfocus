@@ -1,31 +1,51 @@
 require_relative "../spec_helper"
 
-describe Rubyfocus::IDRef do
-	class IDRefTest
-		include Rubyfocus::IDRef
-		idref :target
-		attr_accessor :document
+class IDRefTestClass
+	include Rubyfocus::IDRef
+	attr_accessor :document
+	idref :foo
+end
+
+describe IDRefTestClass do
+	before(:each) do
+		@t = IDRefTestClass.new
+		@t.foo_id = "bar"
 	end
 
-	describe ".idref" do
-	  it "should create an idref" do
-	    test = IDRefTest.new
-	    expect(test.respond_to?(:target_id)).to be true
-	  end
+  it "should correctly fetch when given a document" do
+  	doc = double("document")
+  	ref = double("reference")
+  	expect(doc).to receive(:find).with("bar"){ ref }
 
-	  it "should fetch the correct thing from its document" do
-	    test = IDRefTest.new
-	    document = double("document")
-	    test.document = document
+  	@t.document = doc
+  	expect(@t.foo).to eq(ref)
+  end
 
-	    expect(document).to receive(:find).with("12345").and_return(:target)
-	    test.target_id = "12345"
-	    expect(test.target).to eq(:target)
-	  end
+  it "should return nil when it doesn't have a document" do
+    expect(@t.foo).to be_nil
+  end
 
-	  it "should return +null+ if the ID is null, regardless of whether it has a document or not" do
-	    test = IDRefTest.new
-	    expect(test.target).to eq(nil)
-	  end
-	end
+  it "should return nil when it doesn't have an id" do
+    @s = IDRefTestClass.new
+    expect(@s.foo).to be_nil
+
+    @s.document = double("document")
+		expect(@s.foo).to be_nil    
+  end
+
+  it "should allow us to set using the idless setter and an id'd object" do
+    id_object = double
+    expect(id_object).to receive(:id){ "12345" }
+    @t.foo = id_object
+    expect(@t.foo_id).to eq("12345")
+  end
+
+  it "should throw an error if we try to set an idref to a non-id'd object" do
+    expect{ @t.foo = 3}.to raise_error(ArgumentError)
+  end
+
+  it "should set foo_id to nil if foo is set to nil" do
+    @t.foo = nil
+    expect(@t.foo_id).to be_nil
+  end
 end
