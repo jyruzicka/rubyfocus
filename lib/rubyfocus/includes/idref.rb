@@ -6,6 +6,7 @@ module Rubyfocus
 					name_id = "#{name}_id".to_sym
 					attr_accessor name_id
 					define_method(name) do
+						return nil if name_id.nil?
 						return document && document.find(send(name_id))
 					end
 

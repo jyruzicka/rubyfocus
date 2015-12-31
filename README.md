@@ -2,7 +2,11 @@ Rubyfocus is a one-way (read-only) ruby bridge to OmniFocus. Analyse, store, ins
 
 # Installation
 
-Rubyfocus is a ruby gem. It's not currently hosted on rubygems, though, so you'll have to download and install locally.
+## Via rubygems
+
+```
+gem install rubyfocus
+```
 
 ## Via git
 
@@ -16,7 +20,7 @@ Now build and install it!
 
 ```
 gem build rubyfocus.gemspec
-gem install rubyfocus-0.1.0.gem
+gem install rubyfocus-0.3.0.gem
 ```
 
 # Usage
@@ -64,13 +68,13 @@ d.projects.first.tasks
 
 What if you want to select only certain projects? Sure, you can use standard `Array#find` or `Array#select` methods, but you can also make use of a hash of values:
 
-```
+```ruby
 d.projects.select(name: "Sample project")
 ```
 
 Once you have your objects, you can query them for more information:
 
-```
+```ruby
 t = d.tasks.first
 t.name # => "Sample task"
 t.project.name # => "Sample project"
@@ -102,10 +106,15 @@ Rubyfocus makes use of this by fetching and reading OmniFocus' local store on yo
 
 Other goals include:
 
-* Updating via the [Omni Sync Server](https://manage.sync.omnigroup.com/) rather than relying on local files.
-* A couple of example projects using rubyfocus
+* Registering with the Omni Sync Server, so you don't need to always delete + reinstantiate the database.
+* Determining when you're "detached" from the latest version on the OSS.
+* A couple of example projects using rubyfocus (especially a static webpage generator for kanban)
 
 # History
+
+## 0.3.1 // 2015-12-31
+
+* [Fixed] IDRefs will now return +nil+ if the relevant ID is not set.
 
 ## 0.3.0 // 2015-10-17
 

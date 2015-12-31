@@ -22,5 +22,10 @@ describe Rubyfocus::IDRef do
 	    test.target_id = "12345"
 	    expect(test.target).to eq(:target)
 	  end
+
+	  it "should return +null+ if the ID is null, regardless of whether it has a document or not" do
+	    test = IDRefTest.new
+	    expect(test.target).to eq(nil)
+	  end
 	end
 end
