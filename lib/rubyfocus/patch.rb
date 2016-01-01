@@ -104,7 +104,8 @@ class Rubyfocus::Patch
 		self.create.each do |node|
 			# Sometimes we get aberrant create calls when what we actually want is an update.
 			# We can tell this because the IDs will duplicate. Here we deal with that appropriately.
-			if document.has_id?(node[:id])
+			# If allow_duplicate_ids is set to true, will still create a duplicate
+			if document.has_id?(node[:id]) && !document.allow_duplicate_ids
 				update_node(document, node)
 			else
 				raise(RuntimeError, "Encountered unparsable XML during patch reading: #{node}.") if Rubyfocus::Parser.parse(document, node).nil?

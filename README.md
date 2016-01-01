@@ -119,6 +119,7 @@ Other goals include:
 * Happy new year!
 * [Modified] Container IDRef is now located on RankedItem, rather than having several on each RankedItem subclass.
 * [New] RankedItems can look at their ancestry much more easily, using RankedItem#ancestry and RankedItem#contained_within?
+* [New] Documents now forbid elements with duplicate IDs unless Document#allow_duplicate_ids is set to true.
 
 ## 0.3.1 // 2015-12-31
 
