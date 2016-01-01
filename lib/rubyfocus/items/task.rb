@@ -15,7 +15,7 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 	# * document
 
 	attr_accessor :note, :flagged, :order, :start, :due, :completed
-	idref :container, :context
+	idref :context
 
 	def initialize(document, n=nil)
 		@order = :sequential

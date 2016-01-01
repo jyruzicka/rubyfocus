@@ -4,7 +4,6 @@ class Rubyfocus::Context < Rubyfocus::RankedItem
 		return (node.name == "context")
 	end
 
-	idref :container
 	attr_accessor :location
 
 	def apply_xml(n)

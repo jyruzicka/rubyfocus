@@ -4,8 +4,6 @@ class Rubyfocus::Folder < Rubyfocus::RankedItem
 		return (node.name == "folder")
 	end
 	
-	idref :container
-
 	def apply_xml(n)
 		super(n)
 		conditional_set(:container_id, n.at_xpath("xmlns:folder")){ |e| e["idref"] }

@@ -1,3 +1,5 @@
+# Version: 0.4.0
+
 Rubyfocus is a one-way (read-only) ruby bridge to OmniFocus. Analyse, store, inspect, or play with your projects and tasks in OmniFocus from the comfort and flexibility of ruby!
 
 # Installation
@@ -112,9 +114,15 @@ Other goals include:
 
 # History
 
+## 0.4.0 // 2016-01-01
+
+* Happy new year!
+* [Modified] Container IDRef is now located on RankedItem, rather than having several on each RankedItem subclass.
+* [New] RankedItems can look at their ancestry much more easily, using RankedItem#ancestry and RankedItem#contained_within?
+
 ## 0.3.1 // 2015-12-31
 
-* [Fixed] IDRefs will now return +nil+ if the relevant ID is not set.
+* [Bugfix] IDRefs will now return +nil+ if the relevant ID is not set.
 
 ## 0.3.0 // 2015-10-17
 
