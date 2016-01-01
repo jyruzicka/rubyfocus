@@ -92,43 +92,48 @@ class Rubyfocus::Patch
 		end
 	end
 
-	# Apply this patch to a document. Who needs error checking amirite?
+	# Apply this patch to a document.
 	def apply_to!(document)
 		# Updates modify elements
-		self.update.each do |node|
-			elem = document[node["id"]]
-
-			# Tasks can become projects and v.v.: check this.
-			if [Rubyfocus::Task, Rubyfocus::Project].include?(elem.class)
-				should_be_project = (node.at_xpath("xmlns:project") != nil)
-				if (elem.class == Rubyfocus::Project) && !should_be_project
-					elem.document = nil # Remove this from current document
-					elem = elem.to_task # Convert to task
-					elem.document = document # Insert again!
-				elsif (elem.class == Rubyfocus::Task) && should_be_project
-					elem.document = nil # Remove this from current document
-					elem = elem.to_project # Convert to task
-					elem.document = document # Insert again!
-				end
-			end
-
-			elem.apply_xml(node) if elem
-		end
-
+		self.update.each{ |node| update_node(document, node) }
+		
 		# Deletes remove elements
-		self.delete.each do |node|
-			document.remove_element(node["id"])
-		end
+		self.delete.each{ |node| document.remove_element(node["id"]) }
 
 		# Creates make new elements
 		self.create.each do |node|
-			if Rubyfocus::Parser.parse(document, node).nil?
-				raise RuntimeError, "Encountered unparsable XML during patch reading: #{node}."
+			# Sometimes we get aberrant create calls when what we actually want is an update.
+			# We can tell this because the IDs will duplicate. Here we deal with that appropriately.
+			if document.has_id?(node[:id])
+				update_node(document, node)
+			else
+				raise(RuntimeError, "Encountered unparsable XML during patch reading: #{node}.") if Rubyfocus::Parser.parse(document, node).nil?
 			end
 		end
 
 		# Modify current patch_id to show new value
 		document.patch_id = self.to_id
+	end
+
+	# Atomic node update code
+	def update_node(document, node)
+		elem = document[node["id"]]
+
+		# Tasks can become projects and v.v.: check this.
+		if [Rubyfocus::Task, Rubyfocus::Project].include?(elem.class)
+			should_be_project = (node.at_xpath("xmlns:project") != nil)
+			if (elem.class == Rubyfocus::Project) && !should_be_project
+				elem.document = nil # Remove this from current document
+				elem = elem.to_task # Convert to task
+				elem.document = document # Insert again!
+			elsif (elem.class == Rubyfocus::Task) && should_be_project
+				elem.document = nil # Remove this from current document
+				elem = elem.to_project # Convert to task
+				elem.document = document # Insert again!
+			end
+		end
+
+		elem.apply_xml(node) if elem
 	end
 
 	# String representation

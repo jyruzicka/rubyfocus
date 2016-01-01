@@ -19,4 +19,24 @@ describe Rubyfocus::Document do
 	  expect(@doc["12345"].class).to eq(Rubyfocus::Task)
 	  expect(@doc["does not exist"]).to eq(nil)
 	end
+
+	describe "#add_element", focus: true do
+		it "should throw an exception if we try to add an element with a duplicate ID" do
+			expect {
+				d = Rubyfocus::Document.new
+
+				Rubyfocus::Task.new(d, id: "Sample ID")
+				Rubyfocus::Task.new(d, id: "Sample ID")
+			}.to raise_exception(Rubyfocus::DocumentElementException)
+		end
+
+		it "should not throw an exception if we set allow_duplicate_ids" do
+			d = Rubyfocus::Document.new
+			d.allow_duplicate_ids = true
+
+			# So this should not raise an error
+		  Rubyfocus::Task.new(d, {id: "Sample ID"})
+			Rubyfocus::Task.new(d, {id: "Sample ID"})
+		end
+	end
 end

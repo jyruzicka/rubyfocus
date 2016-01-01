@@ -13,8 +13,6 @@ class Rubyfocus::Item
 	attr_accessor :id, :added, :modified, :document
 
 	def initialize(document=nil, n=nil)
-		self.document = document
-
 		case n
 		when Nokogiri::XML::Element
 			apply_xml(n)
@@ -24,6 +22,8 @@ class Rubyfocus::Item
 				send(setter,v) if respond_to?(setter)
 			end
 		end
+		
+		self.document = document
 	end
 
 	def apply_xml(n)

@@ -109,5 +109,18 @@ describe Rubyfocus::Patch do
 	    expect(d.tasks.size).to eq(1)
 	    expect(d.projects.size).to eq(0)
 	  end
+
+	  it "should update elements when IDs match, even if it wants to create them" do
+	    d = Rubyfocus::Document.new
+	    Rubyfocus::Task.new(d, id: "abc123", flagged: true)
+	    expect(d.tasks.size).to eq(1)
+
+	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="abc123"><name>Foo task</name></task>|))
+	    p.apply_to!(d)
+
+	    expect(d.tasks.size).to eq(1)
+	    expect(d.tasks.first.name).to eq("Foo task")
+	    expect(d.tasks.first.flagged).to eq(true)
+	  end
 	end
 end

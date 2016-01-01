@@ -21,11 +21,16 @@ class Rubyfocus::Document
 	# This is the fetcher object, used to fetch new data
 	attr_accessor :fetcher
 
+	# Does this document allow us to add more than one element with the same ID? 
+	# Defaults to false
+	attr_accessor :allow_duplicate_ids
+
 	# Initalise with one of:
 	# * a Nokogiri document
 	# * a string
 	# * a fetcher subclass
 	def initialize(doc=nil)
+		@allow_duplicate_ids = false
 		%w(contexts settings projects folders tasks).each{ |s| instance_variable_set("@#{s}", Rubyfocus::SearchableArray.new) }
 
 		if doc
@@ -99,11 +104,15 @@ class Rubyfocus::Document
 	# Add an element. Element should be a Project, Task, Context, Folder, or Setting
 	# We assume whoever does this will set document appropriately on the element
 	def add_element(e)
-		dest = ivar_for(e)
-		if dest
-			dest << e
+		if !allow_duplicate_ids && has_id?(e.id)
+			raise Rubyfocus::DocumentElementException, "Element with ID #{e.id} already exists within this document."
 		else
-			raise ArgumentError, "You passed a #{e.class} to Document#add_element - I don't know what to do with this."
+			dest = ivar_for(e)
+			if dest
+				dest << e
+			else
+				raise ArgumentError, "You passed a #{e.class} to Document#add_element - I don't know what to do with this."
+			end
 		end
 	end
 
@@ -131,10 +140,16 @@ class Rubyfocus::Document
 	# For Searchable include
 	alias_method :array, :elements
 
+
 	#-------------------------------------------------------------------------------
 	# Find elements from id
 	def [] search_id
 		self.elements.find{ |elem| elem.id == search_id }
+	end
+
+	# Check if the document has an element of a given ID
+	def has_id?(id)
+		self.elements.any?{ |e| e.id == id }
 	end
 
 	#---------------------------------------
@@ -144,3 +159,7 @@ class Rubyfocus::Document
 		File.open(file, "w"){ |io| io.puts YAML::dump(self) }
 	end
 end
+
+#-------------------------------------------------------------------------------
+# Exceptions
+class Rubyfocus::DocumentElementException < Exception; end
