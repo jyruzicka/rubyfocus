@@ -21,16 +21,11 @@ class Rubyfocus::Document
 	# This is the fetcher object, used to fetch new data
 	attr_accessor :fetcher
 
-	# Does this document allow us to add more than one element with the same ID? 
-	# Defaults to false
-	attr_accessor :allow_duplicate_ids
-
 	# Initalise with one of:
 	# * a Nokogiri document
 	# * a string
 	# * a fetcher subclass
 	def initialize(doc=nil)
-		@allow_duplicate_ids = false
 		%w(contexts settings projects folders tasks).each{ |s| instance_variable_set("@#{s}", Rubyfocus::SearchableArray.new) }
 
 		if doc
@@ -58,7 +53,7 @@ class Rubyfocus::Document
 	end
 
 	# Initialize with a URL, for remote fetching.
-	# Not implemented yet
+	# Not implemented yet TODO implement
 	def self.from_url(url)
 		raise RuntimeError, "Rubyfocus::Document.from_url not yet implemented."
 		# new(Rubyfocus::RemoteFetcher.new(url))
@@ -101,27 +96,36 @@ class Rubyfocus::Document
 	end
 	private :ivar_for
 
-	# Add an element. Element should be a Project, Task, Context, Folder, or Setting
-	# We assume whoever does this will set document appropriately on the element
-	def add_element(e)
-		if !allow_duplicate_ids && has_id?(e.id)
-			raise Rubyfocus::DocumentElementException, "Element with ID #{e.id} already exists within this document."
+	# Add an element. Element should be a Project, Task, Context, Folder, or Setting.
+	# If overwrite set to false and ID already occurs in the document, throw an error.
+	# If ID is nil, throw an error.
+	def add_element(e, overwrite:false)
+		# Error check
+		raise(Rubyfocus::DocumentElementException, "Adding element to document, but it has no ID.") if e.id.nil?
+		raise(Rubyfocus::DocumentElementException, "Adding element to document, but element with this ID already exists.") if !overwrite && has_id?(e.id)
+
+		# Otherwise, full steam ahead
+		e.document = self
+
+		if (dupe_element = self[e.id]) && overwrite
+			remove_element(dupe_element)
+		end
+
+		# Add to the correct array
+		dest = ivar_for(e)
+		if dest
+			dest << e
 		else
-			dest = ivar_for(e)
-			if dest
-				dest << e
-			else
-				raise ArgumentError, "You passed a #{e.class} to Document#add_element - I don't know what to do with this."
-			end
+			raise ArgumentError, "You passed a #{e.class} to Document#add_element - I don't know what to do with this."
 		end
 	end
 
 	# Remove an element from the document.
-	# We assume whoever does this is smart enough to also set the element's #document value
-	# to nil
 	def remove_element(e)
 		e = self[e] if e.is_a?(String)
 		return if e.nil?
+
+		e.document = nil
 
 		dest = ivar_for(e)
 		if dest

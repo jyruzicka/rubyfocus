@@ -78,6 +78,21 @@ describe Rubyfocus::Patch do
 	    expect(d.tasks.size).to eq(1)
 	  end
 
+	  it "should remove values not contained with the update" do
+	    d = Rubyfocus::Document.new
+	    Rubyfocus::Task.new(d, id:"12345", name: "Test task", flagged: true)
+	    task = d.tasks.first
+	    expect(task.name).to eq("Test task")
+	    expect(task.flagged).to eq(true)
+
+	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="12345" op="update"><name>New test task</name></task>|))
+	    p.apply_to!(d)
+
+	    task = d.tasks.first
+	    expect(task.name).to eq("New test task")
+	    expect(task.flagged).to eq(false)
+	  end
+
 	  it "should apply delete patches to delete things" do
 	    d = Rubyfocus::Document.new
 	    Rubyfocus::Task.new(d, id: "12345")
@@ -114,25 +129,14 @@ describe Rubyfocus::Patch do
 	    d = Rubyfocus::Document.new
 	    Rubyfocus::Task.new(d, id: "abc123", flagged: true)
 	    expect(d.tasks.size).to eq(1)
+			expect(d.tasks.first.flagged).to eq(true)
 
 	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="abc123"><name>Foo task</name></task>|))
 	    p.apply_to!(d)
 
 	    expect(d.tasks.size).to eq(1)
 	    expect(d.tasks.first.name).to eq("Foo task")
-	    expect(d.tasks.first.flagged).to eq(true)
-	  end
-
-	  it "should allow duplicate element creation if allow_duplicate_ids is set to true on the document" do
-	    d = Rubyfocus::Document.new
-	    d.allow_duplicate_ids = true
-	    Rubyfocus::Task.new(d, id: "abc123", flagged: true)
-	    expect(d.tasks.size).to eq(1)
-
-	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="abc123"><name>Foo task</name></task>|))
-	    p.apply_to!(d)
-
-	    expect(d.tasks.size).to eq(2)
+	    expect(d.tasks.first.flagged).to eq(false)
 	  end
 	end
 end

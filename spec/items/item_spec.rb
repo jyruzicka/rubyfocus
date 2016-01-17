@@ -25,4 +25,15 @@ describe Rubyfocus::Item do
 	    expect(inspect_string).to include(%|modified=#{@modified_at.inspect}|)
 	  end
 	end
+
+	describe "#document=" do
+	  it "should not run add_element (check against previous behavour)" do
+	    d = Rubyfocus::Document.new
+
+	    t = Rubyfocus::Task.new(nil, id:"foo")
+	    t.document = d
+
+	    expect(d.tasks.size).to eq(0)
+	  end
+	end
 end

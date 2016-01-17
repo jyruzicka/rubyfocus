@@ -30,13 +30,18 @@ describe Rubyfocus::Document do
 			}.to raise_exception(Rubyfocus::DocumentElementException)
 		end
 
-		it "should not throw an exception if we set allow_duplicate_ids" do
-			d = Rubyfocus::Document.new
-			d.allow_duplicate_ids = true
+		it "should remove old elements if we set overwrite to true" do
+		  d = Rubyfocus::Document.new
 
 			# So this should not raise an error
-		  Rubyfocus::Task.new(d, {id: "Sample ID"})
-			Rubyfocus::Task.new(d, {id: "Sample ID"})
+		  t1 = Rubyfocus::Task.new(nil, {id: "Sample ID"})
+			t2 = Rubyfocus::Task.new(nil, {id: "Sample ID"})
+
+			d.add_element(t1)
+			d.add_element(t2, overwrite: true)
+
+			expect(d.tasks.size).to eq(1)
+			expect(d.tasks.first).to eq(t2)
 		end
 	end
 end

@@ -38,11 +38,9 @@ describe Rubyfocus::Project do
 		before(:each) do 
 			@d = Rubyfocus::Document.new
 
-	    @p = Rubyfocus::Project.new(@d)
-	    @p.id = "project_id"
+	    @p = Rubyfocus::Project.new(@d, id: "project id")
 
-	    @t = Rubyfocus::Task.new(@d)
-	    @t.container_id = "project_id"
+	    @t = Rubyfocus::Task.new(@d, id: "task id", container: @p)
 	  end
 
 	  it "should return true when undone tasks remain" do

@@ -25,13 +25,13 @@ describe Rubyfocus::RankedItem do
 				include Rubyfocus::Searchable
 				attr_accessor :array
 				def initialize; @array = []; end
-				def add_element(e); @array << e; end
+				def add_element(e); @array << e; e.document = self; end
 			end
 
-	  	@doc = FakeDocument.new
-	  	@grandparent = Rubyfocus::RankedItem.new(@doc, {id: "grandparent", name: "Grandparent"})
-	  	@parent		 	= Rubyfocus::RankedItem.new(@doc, {id: "parent", name: "Parent", container: @grandparent})
-	  	@item 				= Rubyfocus::RankedItem.new(@doc, {id: "item", name: "Item", container: @parent})
+	  	@doc 					= FakeDocument.new
+	  	@grandparent 	= Rubyfocus::RankedItem.new(@doc, id: "grandparent", 	name: "Grandparent")
+	  	@parent		 		= Rubyfocus::RankedItem.new(@doc, id: "parent", 			name: "Parent", 	container: @grandparent)
+	  	@item 				= Rubyfocus::RankedItem.new(@doc, id: "item", 				name: "Item", 		container: @parent)
 	  end
 
 		describe "#ancestry" do

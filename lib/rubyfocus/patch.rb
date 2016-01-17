@@ -101,16 +101,7 @@ class Rubyfocus::Patch
 		self.delete.each{ |node| document.remove_element(node["id"]) }
 
 		# Creates make new elements
-		self.create.each do |node|
-			# Sometimes we get aberrant create calls when what we actually want is an update.
-			# We can tell this because the IDs will duplicate. Here we deal with that appropriately.
-			# If allow_duplicate_ids is set to true, will still create a duplicate
-			if document.has_id?(node[:id]) && !document.allow_duplicate_ids
-				update_node(document, node)
-			else
-				raise(RuntimeError, "Encountered unparsable XML during patch reading: #{node}.") if Rubyfocus::Parser.parse(document, node).nil?
-			end
-		end
+		self.create.each{ |node| update_node(document, node) }
 
 		# Modify current patch_id to show new value
 		document.patch_id = self.to_id
@@ -118,23 +109,13 @@ class Rubyfocus::Patch
 
 	# Atomic node update code
 	def update_node(document, node)
-		elem = document[node["id"]]
-
-		# Tasks can become projects and v.v.: check this.
-		if [Rubyfocus::Task, Rubyfocus::Project].include?(elem.class)
-			should_be_project = (node.at_xpath("xmlns:project") != nil)
-			if (elem.class == Rubyfocus::Project) && !should_be_project
-				elem.document = nil # Remove this from current document
-				elem = elem.to_task # Convert to task
-				elem.document = document # Insert again!
-			elsif (elem.class == Rubyfocus::Task) && should_be_project
-				elem.document = nil # Remove this from current document
-				elem = elem.to_project # Convert to task
-				elem.document = document # Insert again!
-			end
+		# Create new element with correct ID. Then add to document, overwriting previous element(s)
+		new_node = Rubyfocus::Parser.parse(nil, node)
+		if new_node
+			document.add_element(new_node, overwrite: true)
+		else
+			raise(RuntimeError, "Encountered unparsable XML during patch reading: #{node}.")
 		end
-
-		elem.apply_xml(node) if elem
 	end
 
 	# String representation

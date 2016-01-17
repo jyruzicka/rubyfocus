@@ -39,7 +39,7 @@ describe Rubyfocus::Task do
     it "should fetch sub-tasks" do
       d = Rubyfocus::Document.new
       t = Rubyfocus::Task.new(d, id: "Sample")
-      t2 = Rubyfocus::Task.new(d, container: t)
+      t2 = Rubyfocus::Task.new(d, id: "Task 2", container: t)
 
       expect(t.tasks).to include(t2)
     end
@@ -47,8 +47,8 @@ describe Rubyfocus::Task do
     it "should exclude sub-tasks that in turn have sub-tasks, but include their tasks" do
       d = Rubyfocus::Document.new
       t = Rubyfocus::Task.new(d, id: "Sample")
-      t2 = Rubyfocus::Task.new(d, container: t, id: "subtask")
-      t3 = Rubyfocus::Task.new(d, container: t2)
+      t2 = Rubyfocus::Task.new(d, id: "Subtask", container: t)
+      t3 = Rubyfocus::Task.new(d, id: "Sub-sub task", container: t2)
 
 			expect(t.tasks).to_not include(t2)
       expect(t.tasks).to include(t3)
@@ -59,7 +59,7 @@ describe Rubyfocus::Task do
     it "should fetch immediate sub-tasks" do
       d = Rubyfocus::Document.new
       t = Rubyfocus::Task.new(d, id: "Sample")
-      t2 = Rubyfocus::Task.new(d, container: t)
+      t2 = Rubyfocus::Task.new(d, id: "Subtask", container: t)
 
       expect(t.immediate_tasks).to include(t2)
     end
@@ -67,8 +67,8 @@ describe Rubyfocus::Task do
     it "should include sub-tasks that in turn have sub-tasks, but exclude their tasks" do
       d = Rubyfocus::Document.new
       t = Rubyfocus::Task.new(d, id: "Sample")
-      t2 = Rubyfocus::Task.new(d, container: t, id: "subtask")
-      t3 = Rubyfocus::Task.new(d, container: t2)
+      t2 = Rubyfocus::Task.new(d, id: "Subtask", container: t)
+      t3 = Rubyfocus::Task.new(d, id: "Sub-subtask", container: t2)
 
 			expect(t.immediate_tasks).to include(t2)
       expect(t.immediate_tasks).to_not include(t3)
@@ -78,20 +78,20 @@ describe Rubyfocus::Task do
   describe "#next_available_task" do
     it "should fetch the next non-blocked task - simple case" do
     	d = Rubyfocus::Document.new
-    	d.allow_duplicate_ids = true
+    	
       p = Rubyfocus::Task.new(d, id: "12345")
-      t = Rubyfocus::Task.new(d, container: p, rank: 1)
-      t2 = Rubyfocus::Task.new(d, container: p, rank: 0)
+      t = Rubyfocus::Task.new(d, id: "First task", container: p, rank: 1)
+      t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, rank: 0)
       expect(p.next_available_task).to eq(t2)
     end
 
     it "should fetch the next non-blocked task, even when it's buried" do
       d = Rubyfocus::Document.new
-      d.allow_duplicate_ids = true
+      
       p = Rubyfocus::Task.new(d, id: "12345")
-      t = Rubyfocus::Task.new(d, container: p, rank: 2)
-      t2 = Rubyfocus::Task.new(d, container: p, id: "abcde", rank: 1)
-      t3 = Rubyfocus::Task.new(d, container: t2, rank: 3)
+      t = Rubyfocus::Task.new(d, id: "First task", container: p, rank: 2)
+      t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, id: "abcde", rank: 1)
+      t3 = Rubyfocus::Task.new(d, id: "Third task", container: t2, rank: 3)
 
       expect(p.next_available_task).to eq(t3)
     end
@@ -100,7 +100,7 @@ describe Rubyfocus::Task do
   describe "#has_subtasks?" do
     it "should return false if a task has no subtasks" do
       d = Rubyfocus::Document.new
-      t = Rubyfocus::Task.new(d)
+      t = Rubyfocus::Task.new(d, id: "Task")
 
       expect(t.has_subtasks?).to eq(false)
     end
@@ -108,7 +108,7 @@ describe Rubyfocus::Task do
     it "should return true if a task has subtasks" do
       d = Rubyfocus::Document.new
       t = Rubyfocus::Task.new(d,id: "12345")
-      t2 = Rubyfocus::Task.new(d,container: t)
+      t2 = Rubyfocus::Task.new(d, id: "Task 2", container: t)
 
       expect(t.has_subtasks?).to eq(true)
     end
@@ -132,11 +132,10 @@ describe Rubyfocus::Task do
 	describe "#incomplete_tasks" do
 	  it "should catch incomplete tasks, and avoid complete ones" do
 	    d = Rubyfocus::Document.new
-	    d.allow_duplicate_ids = true
 
 	    p = Rubyfocus::Task.new(d, id: "sample id", order: :parallel)
-	    t = Rubyfocus::Task.new(d, container: p)
-	    t2 = Rubyfocus::Task.new(d, container: p, completed: Time.now)
+	    t = Rubyfocus::Task.new(d, id: "First task", container: p)
+	    t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, completed: Time.now)
 
 	    expect(p.incomplete_tasks).to include(t)
 	    expect(p.incomplete_tasks).to_not include(t2)
@@ -148,17 +147,17 @@ describe Rubyfocus::Task do
 	  it "should catch tasks by default" do
 	  	d = Rubyfocus::Document.new
 	    p = Rubyfocus::Task.new(d, id: "sample id", order: :parallel)
-	    t = Rubyfocus::Task.new(d, container: p)
+	    t = Rubyfocus::Task.new(d, id: "Task", container: p)
 
 	    expect(p.next_tasks).to include(t)
 	  end
 
 	  it "should not catch completed tasks" do
 	    d = Rubyfocus::Document.new
-	    d.allow_duplicate_ids = true
+	    
 	    p = Rubyfocus::Task.new(d, id: "sample id", order: :parallel)
-	    t = Rubyfocus::Task.new(d, container: p)
-	    t2 = Rubyfocus::Task.new(d, container: p, completed: Time.now)
+	    t = Rubyfocus::Task.new(d, id: "First task", container: p)
+	    t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, completed: Time.now)
 
 	    expect(p.next_tasks).to include(t)
 	    expect(p.next_tasks).to_not include(t2)
@@ -166,11 +165,10 @@ describe Rubyfocus::Task do
 
 	  it "should not catch tasks that are blocked in a sequential group" do
 	    d = Rubyfocus::Document.new
-	    d.allow_duplicate_ids = true
 
 	    p = Rubyfocus::Task.new(d, id: "sample id", order: :sequential)
-	    t = Rubyfocus::Task.new(d, container: p, order: 1)
-	    t2 = Rubyfocus::Task.new(d, container: p, order: 2)
+	    t = Rubyfocus::Task.new(d, id: "First task", container: p, order: 1)
+	    t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, order: 2)
 
 	    expect(p.next_tasks).to include(t)
 	    expect(p.next_tasks).to_not include(t2)
@@ -178,13 +176,12 @@ describe Rubyfocus::Task do
 
 	  it "should not catch tasks that are blocked in a sequential subtask" do
 	    d = Rubyfocus::Document.new
-	    d.allow_duplicate_ids = true
 
 	    p = Rubyfocus::Task.new(d, id: "sample id", order: :parallel)
 
-	    t = Rubyfocus::Task.new(d, container: p, id: "task", order: :sequential)
-	    t2 = Rubyfocus::Task.new(d, container: t)
-	    t3 = Rubyfocus::Task.new(d, container: t)
+	    t = Rubyfocus::Task.new(d, id: "First task", container: p, id: "task", order: :sequential)
+	    t2 = Rubyfocus::Task.new(d, id: "Second task", container: t)
+	    t3 = Rubyfocus::Task.new(d, id: "Third task", container: t)
 
 	    expect(p.next_tasks).to include(t2)
 	    expect(p.next_tasks).to_not include(t3)
@@ -196,11 +193,10 @@ describe Rubyfocus::Task do
 	describe "#actionable_tasks" do
 	  it "should not catch tasks that start in the future" do
 			d = Rubyfocus::Document.new
-			d.allow_duplicate_ids = true
 			
-	    p = Rubyfocus::Task.new(d, id: "sample id", order: :parallel)
-	    t = Rubyfocus::Task.new(d, container: p)
-	    t2 = Rubyfocus::Task.new(d, container: p, start: Time.now+60*60*24)
+	    p = Rubyfocus::Task.new(d, id: "Project", order: :parallel)
+	    t = Rubyfocus::Task.new(d, id: "Sample task", container: p)
+	    t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, start: Time.now+60*60*24)
 
 	    expect(p.actionable_tasks).to include(t)
 	    expect(p.actionable_tasks).to_not include(t2)

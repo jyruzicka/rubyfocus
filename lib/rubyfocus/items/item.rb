@@ -23,7 +23,7 @@ class Rubyfocus::Item
 			end
 		end
 		
-		self.document = document
+		document.add_element(self) if document
 	end
 
 	def apply_xml(n)
@@ -43,14 +43,6 @@ class Rubyfocus::Item
 
 	def to_serial
 		inspect_properties.each_with_object({}){ |s,hsh| hsh[s] = self.send(s) }
-	end
-
-	#---------------------------------------
-	# Document set/get methods
-	def document= d
-		@document.remove_element(self) if @document
-		@document = d
-		@document.add_element(self) if @document
 	end
 
 	#-------------------------------------------------------------------------------

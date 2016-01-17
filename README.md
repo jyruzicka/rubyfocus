@@ -121,6 +121,7 @@ Other goals include:
 * [New] RankedItems can look at their ancestry much more easily, using RankedItem#ancestry and RankedItem#contained_within?
 * [New] Documents now forbid elements with duplicate IDs unless Document#allow_duplicate_ids is set to true.
 * [New] Patchers now treate CREATE nodes on elements whose IDs already exist in the database as UPDATE nodes
+* [Fixed] Patchers will now interpret missing parameters as "default values" e.g. project update without `status` parameter assumed to be active.
 
 ## 0.3.1 // 2015-12-31
 
