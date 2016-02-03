@@ -3,6 +3,7 @@
 # INCLUDE *
 # EXCLUDE **/.DS_Store
 # EXCLUDE .*
+# EXCLUDE Manifest
 # EXCLUDE stage_ofocus.rb
 # EXCLUDE spec/files/ofocus_staging
 
