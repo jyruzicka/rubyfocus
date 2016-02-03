@@ -2,7 +2,7 @@
 # INCLUDE lib/**/*
 # INCLUDE *
 # EXCLUDE **/.DS_Store
-# EXCLUDE .rarity
+# EXCLUDE .*
 # EXCLUDE stage_ofocus.rb
 # EXCLUDE spec/files/ofocus_staging
 
