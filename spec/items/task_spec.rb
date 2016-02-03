@@ -90,10 +90,17 @@ describe Rubyfocus::Task do
       
       p = Rubyfocus::Task.new(d, id: "12345")
       t = Rubyfocus::Task.new(d, id: "First task", container: p, rank: 2)
-      t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, id: "abcde", rank: 1)
+      t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, rank: 1)
       t3 = Rubyfocus::Task.new(d, id: "Third task", container: t2, rank: 3)
 
       expect(p.next_available_task).to eq(t3)
+    end
+
+    it "should return nil when project has no tasks" do
+      d = Rubyfocus::Document.new
+      p = Rubyfocus::Task.new(d, id: "12345")
+
+      expect(p.next_available_task).to eq(nil)
     end
   end
 
@@ -179,7 +186,7 @@ describe Rubyfocus::Task do
 
 	    p = Rubyfocus::Task.new(d, id: "sample id", order: :parallel)
 
-	    t = Rubyfocus::Task.new(d, id: "First task", container: p, id: "task", order: :sequential)
+	    t = Rubyfocus::Task.new(d, id: "First task", container: p, order: :sequential)
 	    t2 = Rubyfocus::Task.new(d, id: "Second task", container: t)
 	    t3 = Rubyfocus::Task.new(d, id: "Third task", container: t)
 

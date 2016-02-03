@@ -1,6 +1,7 @@
 # The patch class represents a text-file patch, storing update, delete, and creation operations.
 # It should also be able to apply itself to an existing document.
 class Rubyfocus::Patch
+	include Comparable
 	# The fetcher this patch belongs to. We mainly use this to work out how to fetch content for the patch proper
 	attr_accessor :fetcher
 
@@ -113,8 +114,6 @@ class Rubyfocus::Patch
 		new_node = Rubyfocus::Parser.parse(nil, node)
 		if new_node
 			document.add_element(new_node, overwrite: true)
-		else
-			raise(RuntimeError, "Encountered unparsable XML during patch reading: #{node}.")
 		end
 	end
 
@@ -124,6 +123,22 @@ class Rubyfocus::Patch
 			"(#{from_ids.first} -> #{to_id})"
 		else
 			"([#{from_ids.join(", ")}] -> #{to_id})"
+		end
+	end
+
+	def <=> o
+		if self.time.nil?
+			if o.time.nil?
+				0
+			else
+				-1
+			end
+		else
+			if o.time.nil?
+				1
+			else
+				self.time <=> o.time
+			end
 		end
 	end
 end

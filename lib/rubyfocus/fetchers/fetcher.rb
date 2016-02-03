@@ -38,6 +38,24 @@ class Rubyfocus::Fetcher
 		raise RuntimeError, "Method Fetcher#patch called for abstract class Fetcher."
 	end
 
+	# Returns the latest patch
+	def head
+		@head ||= patches.sort.last
+	end
+
+	# Can you reach head from the given ID?
+	def can_reach_head_from?(id)
+		patch_array = patches.select{ |p| p.from_ids.include?(id) }
+		until patch_array.empty?
+			p = patch_array.first
+			return true if p == self.head
+
+			next_patches = patches.select{ |np| np.from_ids.include? p.to_id }
+			patch_array = patch_array[1..-1] + next_patches
+		end
+		return false
+	end
+
 	#---------------------------------------
 	# Patching methods
 
@@ -65,7 +83,7 @@ class Rubyfocus::Fetcher
 	# apply the latest one.
 	def next_patch(document)
 		all_possible_patches = self.patches.select{ |patch| patch.can_patch?(document) }
-		return all_possible_patches.sort_by(&:time).last
+		return all_possible_patches.sort.first
 	end
 
 

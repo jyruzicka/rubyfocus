@@ -67,7 +67,7 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 	# The first non-completed task, determined by order
 	def next_available_task
 		nat_candidate = immediate_tasks.select{ |t| !t.completed? }.sort_by(&:rank).first
-		if nat_candidate.has_subtasks?
+		if nat_candidate && nat_candidate.has_subtasks?
 			nat_candidate.next_available_task
 		else
 			nat_candidate

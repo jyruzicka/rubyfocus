@@ -139,4 +139,19 @@ describe Rubyfocus::Patch do
 	    expect(d.tasks.first.flagged).to eq(false)
 	  end
 	end
+
+	describe "#<=>" do
+	  it "should compare times" do
+	    p1 = Rubyfocus::Patch.new(nil, "20150101103000=1+2.zip")
+	    p2 = Rubyfocus::Patch.new(nil, "20160101103000=1+2.zip")
+	    p3 = Rubyfocus::Patch.new(nil,nil)
+	    p4 = Rubyfocus::Patch.new(nil,nil)
+
+	    expect(p1).to be < p2
+
+	    expect(p3.time).to be_nil
+	    expect(p3).to be < p1
+	    expect(p3).to be == p4
+	  end
+	end
 end

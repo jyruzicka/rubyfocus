@@ -1,4 +1,4 @@
-# Version: 0.4.0
+# Version: 0.5.0
 
 Rubyfocus is a one-way (read-only) ruby bridge to OmniFocus. Analyse, store, inspect, or play with your projects and tasks in OmniFocus from the comfort and flexibility of ruby!
 
@@ -106,36 +106,4 @@ Rubyfocus makes use of this by fetching and reading OmniFocus' local store on yo
 
 `rubyfocus` is a work in progress. In the near future I hope to release a more comprehensive document detailing exactly which details of OmniFocus' projects and tasks are available to the user, and what you can do with them.
 
-Other goals include:
-
-* Registering with the Omni Sync Server, so you don't need to always delete + reinstantiate the database.
-* Determining when you're "detached" from the latest version on the OSS.
-* A couple of example projects using rubyfocus (especially a static webpage generator for kanban)
-
-# History
-
-## 0.4.0 // 2016-01-01
-
-* Happy new year!
-* [Modified] Container IDRef is now located on RankedItem, rather than having several on each RankedItem subclass.
-* [New] RankedItems can look at their ancestry much more easily, using RankedItem#ancestry and RankedItem#contained_within?
-* [New] Documents now forbid elements with duplicate IDs unless Document#allow_duplicate_ids is set to true.
-* [New] Patchers now treate CREATE nodes on elements whose IDs already exist in the database as UPDATE nodes
-* [Fixed] Patchers will now interpret missing parameters as "default values" e.g. project update without `status` parameter assumed to be active.
-
-## 0.3.1 // 2015-12-31
-
-* [Bugfix] IDRefs will now return +nil+ if the relevant ID is not set.
-
-## 0.3.0 // 2015-10-17
-
-* [New] Now supports remote syncing with the Omni Sync Server!
-
-## 0.2.0 // 2015-10-11
-
-* [Bugfix] Will now turn tasks into projects and projects into tasks if the user has done this in OmniFocus.
-* [Bugfix] Rubyfocus::Patch now does patch application, rather than delegating to the Fetcher.
-
-## 0.1.0 // 2015-10-10
-
-* Hello, world!
+My main goal is to register with the Omni Sync Server, so you don't need to always delete + reinstantiate the database.
