@@ -66,12 +66,17 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 
 	# The first non-completed task, determined by order
 	def next_available_task
-		nat_candidate = immediate_tasks.select{ |t| !t.completed? }.sort_by(&:rank).first
+		nat_candidate = next_available_immediate_task
 		if nat_candidate && nat_candidate.has_subtasks?
 			nat_candidate.next_available_task
 		else
 			nat_candidate
 		end
+	end
+
+	# The first non-completed immediate child task
+	def next_available_immediate_task
+		immediate_tasks.select{ |t| !t.completed? }.sort_by(&:rank).first
 	end
 
 	# A list of all tasks that you can take action on. Actionable tasks
@@ -110,7 +115,14 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 
 	# Can we attack this task, or does its container stop that happening?
 	def blocked?
-		container && (container.order == :sequential) && (container.next_available_task != self)
+		# Cannot be blocked without a container, or when inside a folder
+		return false if container.nil? || container.is_a?(Rubyfocus::Folder)
+
+		# If container is blocked, I must be blocked
+		return true if container.blocked?
+
+		# Otherwise, only blocked if the container is sequential and I'm not next
+		return (container.order == :sequential && container.next_available_immediate_task != self)
 	end
 
 	#---------------------------------------

@@ -210,6 +210,68 @@ describe Rubyfocus::Task do
 	  end
 	end
 
+	# Blocked tasks are tasks which cannot be completed until another
+	# task is completed
+	describe "#blocked?" do
+	  it "should return true if it's the second task in a sequential list" do
+	    d = Rubyfocus::Document.new
+	    p = Rubyfocus::Task.new(d, id: "Project", order: :sequential)
+	    t1 = Rubyfocus::Task.new(d, id: "Subtask 1", container: p, rank: 1)
+	    t2 = Rubyfocus::Task.new(d, id: "Subtask 2", container: p, rank: 0)
+
+	    expect(t1).to be_blocked
+	    expect(t2).to_not be_blocked
+	  end
+
+	  it "should return false if it's in a non-blocked parallel list" do
+			d = Rubyfocus::Document.new
+	    p = Rubyfocus::Task.new(d, id: "Project", order: :parallel)
+	    t1 = Rubyfocus::Task.new(d, id: "Subtask 1", container: p, rank: 1)
+	    t2 = Rubyfocus::Task.new(d, id: "Subtask 2", container: p, rank: 0)
+
+	    expect(t1).to_not be_blocked
+	    expect(t2).to_not be_blocked
+	  end
+
+	  it "should return true if it's contained by a folder" do
+	    d = Rubyfocus::Document.new
+	    f = Rubyfocus::Folder.new(d, id: "folder")
+	    p1 = Rubyfocus::Project.new(d, id:"Project 1", container: f)
+	    p2 = Rubyfocus::Project.new(d, id:"Project 2", container: f)
+
+	    expect(p1).to_not be_blocked
+	    expect(p2).to_not be_blocked
+	  end
+
+	  it "should return true if its parent is blocked" do
+	    d = Rubyfocus::Document.new
+	    p = Rubyfocus::Task.new(d, id: "Project", order: :sequential)
+	    c1 = Rubyfocus::Task.new(d, id: "Container 1", container: p, rank: 1)
+	    c2 = Rubyfocus::Task.new(d, id: "Container 2", container: p, rank: 0)
+
+			t1 = Rubyfocus::Task.new(d, id: "Subtask 1", container: c1, rank: 1)
+	    t2 = Rubyfocus::Task.new(d, id: "Subtask 2", container: c1, rank: 0)
+	    t3 = Rubyfocus::Task.new(d, id: "Subtask 3", container: c2, rank: 1)
+	    t4 = Rubyfocus::Task.new(d, id: "Subtask 4", container: c2, rank: 0)	
+
+	    # p
+	    # + c2
+	    #   + t4
+	    #   + t3
+	    # + c1
+	    # 	+ t2
+	    # 	+ t1    
+
+	    expect(p).to_not be_blocked
+	    expect(c1).to be_blocked
+	    expect(c2).to_not be_blocked
+	    expect(t1).to be_blocked
+	    expect(t2).to be_blocked
+	    expect(t3).to be_blocked
+	    expect(t4).to_not be_blocked
+	  end
+	end
+
 	#---------------------------------------
 	# Conversion methods
 	#---------------------------------------

@@ -1,5 +1,9 @@
 # History
 
+## 0.5.3 // 2016-02-04
+
+* [Fixed] Re-did the code determining whether a task was blocked. Now tasks are considered blocked if their immediate container is blocked.
+
 ## 0.5.2 // 2016-02-04
 
 * [Fixed] Whoops! Did I leave HTTParty out of the gem install list? My bad!
@@ -26,7 +30,7 @@ Now work out how close to (or far from) the head of your document you are!
 
 ## 0.3.1 // 2015-12-31
 
-* [Bugfix] IDRefs will now return +nil+ if the relevant ID is not set.
+* [Bugfix] IDRefs will now return `nil` if the relevant ID is not set.
 
 ## 0.3.0 // 2015-10-17
 
