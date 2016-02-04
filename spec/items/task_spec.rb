@@ -194,6 +194,19 @@ describe Rubyfocus::Task do
 	    expect(p.next_tasks).to_not include(t3)
 	    expect(p.next_tasks).to_not include(t)
 	  end
+
+	  it "should not catch tasks whose container is blocked" do
+	    d = Rubyfocus::Document.new
+
+	    p = Rubyfocus::Project.new(d, id: "Containing project", order: :sequential)
+
+	    t1 = Rubyfocus::Task.new(d, id: "First task", container: p, rank: 1)
+	    t2 = Rubyfocus::Task.new(d, id: "Second task", container: p, rank: 2)
+	    t3 = Rubyfocus::Task.new(d, id: "First subtask", container: t1)
+	    t4 = Rubyfocus::Task.new(d, id: "Second subtask", container: t2)
+
+	    expect(p.next_tasks).to eq([t3])
+	  end
 	end
 
 	# Actionable tasks are next tesks which aren't deferred

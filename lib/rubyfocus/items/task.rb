@@ -85,17 +85,17 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 	# * not blocked (as part of a sequential project or task group)
 	# * not due to start in the future
 	def actionable_tasks
-		@actionable_tasks ||= next_tasks.select{ |t| !t.deferred? }
+		next_tasks.select{ |t| !t.deferred? }
 	end
 
 	# A list of all tasks that are not blocked.
 	def next_tasks
-		@next_tasks ||= incomplete_tasks.select{ |t| !t.blocked? }
+		incomplete_tasks.select{ |t| !t.blocked? }
 	end
 
 	# A list of all tasks that aren't complete
 	def incomplete_tasks
-		@incomplete_tasks ||= tasks.select{ |t| !t.completed? }
+		tasks.select{ |t| !t.completed? }
 	end
 
 	# Are there any tasks on this project which aren't completed?

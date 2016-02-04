@@ -3,6 +3,7 @@
 ## 0.5.3 // 2016-02-04
 
 * [Fixed] Re-did the code determining whether a task was blocked. Now tasks are considered blocked if their immediate container is blocked.
+* [Fixed] Caching some task filters on the `Task` class was causing issues. Removed caching, which shouldn't hit performance much.
 
 ## 0.5.2 // 2016-02-04
 
