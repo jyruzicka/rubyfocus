@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
   # Add runtime dependencies here
   s.add_runtime_dependency "nokogiri", "~> 1.6", ">= 1.6.6"
   s.add_runtime_dependency "rubyzip", "~> 1.1", ">= 1.1.7"
+  s.add_runtime_dependency "httparty", "~> 0.13", ">= 0.13.7"
 end

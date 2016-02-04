@@ -1,5 +1,9 @@
 # History
 
+## 0.5.2 // 2016-02-04
+
+* [Fixed] Whoops! Did I leave HTTParty out of the gem install list? My bad!
+
 ## 0.5.1 // 2016-02-03
 
 * [Fixed] `Task#next_available_task` should no longer cause errors when a project has no tasks.
