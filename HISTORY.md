@@ -1,5 +1,9 @@
 # History
 
+## 0.5.4 // 2016-02-08
+
+* [Fixed] `LocalFetcher` will now try the default App Store location if it can't find anything at the normal location.
+
 ## 0.5.3 // 2016-02-04
 
 * [Fixed] Re-did the code determining whether a task was blocked. Now tasks are considered blocked if their immediate container is blocked.

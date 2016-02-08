@@ -6,7 +6,7 @@
 # a Nokogiri XML document (or +nil+). Alternatively, you can initialize through +Document.from_file(file)+,
 # which reads the file and parses it as XML
 #
-# You add XML to the document by running +Documet::apply_xml(doc)+, which takes all children of the root
+# You add XML to the document by running +Document::apply_xml(doc)+, which takes all children of the root
 # XML node, tries to turn each child into a relevant object, and adds it to the document. This is done using
 # the private +ivar_for+ method, as well as +add_element(e)+, which you can use to add individual objects.
 class Rubyfocus::Document

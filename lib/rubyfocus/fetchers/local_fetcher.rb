@@ -1,6 +1,4 @@
 class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
-	# This is where the files are usually stored
-	LOCATION = File.join(ENV["HOME"], "/Library/Containers/com.omnigroup.OmniFocus2/Data/Library/Application Support/OmniFocus/OmniFocus.ofocus")
 
 	#---------------------------------------
 	# Parent method overrides
@@ -56,8 +54,33 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 
 	#---------------------------------------
 	# Location file setters and getters
+
+	# Default (non app-store) file location
+	def default_location
+		@default_location ||= File.join(ENV["HOME"],
+																		"/Library/Containers/com.omnigroup.OmniFocus2",
+																		"Data/Library/Application Support/OmniFocus/OmniFocus.ofocus")
+	end
+
+	# Default app-store file location
+	def appstore_location
+		@appstore_location ||= File.join(ENV["HOME"],
+																			"/Library/Containers/com.omnigroup.OmniFocus2.MacAppStore",
+																			"Data/Library/Application Support/OmniFocus/OmniFocus.ofocus")
+	end
+
+	# Determine location based on assigned and default values. Returns +nil+
+	# if no assigned location and default locations don't exist.
 	def location
-		@location || LOCATION
+		if @location
+			@location
+		elsif File.exists?(default_location)
+			default_location
+		elsif File.exists?(appstore_location)
+			appstore_location
+		else
+			nil
+		end
 	end
 
 	def location= l

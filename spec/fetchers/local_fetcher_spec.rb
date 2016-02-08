@@ -43,6 +43,49 @@ describe Rubyfocus::LocalFetcher do
     end
   end
 
+  describe "#location" do
+    it "should fetch the assigned location when one is set" do
+      f = Rubyfocus::LocalFetcher.new
+      f.location = "foobar"
+      expect(f.location).to eq("foobar")
+    end
+
+    describe "when no location is set" do
+      it "should fetch the default location if it exists" do
+        f = Rubyfocus::LocalFetcher.new
+        # Set default location to somewhere that exists
+        default_location = File.join(__dir__, "fetcher_spec.rb")
+        f.instance_variable_set("@default_location", default_location)
+
+        expect(f.location).to eq(default_location)
+      end
+
+      it "should fetch the appstore location if default location doesn't exist" do
+        f = Rubyfocus::LocalFetcher.new
+        # Set default location to somewhere that exists
+        fake_location = File.join(__dir__, "does_not_exist")
+        default_location = File.join(__dir__, "fetcher_spec.rb")
+
+        f.instance_variable_set("@default_location", fake_location)
+        f.instance_variable_set("@appstore_location", default_location)
+
+        expect(f.location).to eq(default_location)
+      end
+
+      it "should return nil if neither location exists" do
+        f = Rubyfocus::LocalFetcher.new
+        # Set default location to somewhere that exists
+        fake_location = File.join(__dir__, "does_not_exist")
+        second_fake_location = File.join(__dir__, "does_not_exist_either")
+
+        f.instance_variable_set("@default_location", fake_location)
+        f.instance_variable_set("@appstore_location", second_fake_location)
+
+        expect(f.location).to eq(nil)
+      end
+    end
+  end
+
   describe "integration tests" do
     it "should apply patches incrementally" do
       d = Rubyfocus::Document.new(basic_fetcher)
