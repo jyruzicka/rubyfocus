@@ -16,8 +16,11 @@ class Rubyfocus::RankedItem < Rubyfocus::NamedItem
 	# Is this item contained within another? You may supply an object, string or integer ID, hash of properties,
 	# or proc to run on each item.
 	def contained_within?(object)
-		object = document.find(object) if [String, Fixnum, Hash, Proc].include?(object.class)
-		ancestry.include?(object)
+		if [String, Fixnum, Hash, Proc].include?(object.class)
+			document.find_all(object).any?{ |o|  ancestry.include?(o) }
+		else
+			ancestry.include?(object)
+		end
 	end
 
 	def apply_xml(n)

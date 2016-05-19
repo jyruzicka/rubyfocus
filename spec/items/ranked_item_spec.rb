@@ -75,6 +75,15 @@ describe Rubyfocus::RankedItem do
 	    	expect(@grandparent.contained_within?(name: "Item")).to eq(false)
 	    	expect(@grandparent.contained_within?(name: "Parent")).to eq(false)
 		  end
+
+		  it "should work even with multiple objects that have the same property" do
+		    new_parent = Rubyfocus::RankedItem.new(@doc,id: "different-parent", name: "Parent")
+	  		new_item = Rubyfocus::RankedItem.new(@doc, 	id: "different-item", 	name: "Item", container: new_parent)
+	  		
+	  		# Both these should return true
+	  		expect(new_item.contained_within?(name: "Parent")).to eq(true)
+	  		expect(@item.contained_within?(name: "Parent")).to eq(true)
+		  end
 		end
 	end
 end

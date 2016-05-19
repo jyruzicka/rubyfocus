@@ -1,5 +1,12 @@
 # History
 
+## 0.5.5 // 2016-05-18
+
+* [Fixed] If there are no patches, `Fetcher#head`s will return the ID of the base file.
+* [Fixed] `Fetcher#head` will now return the ID of the most recent patch, not the patch itself.
+* [New] `Searchable` objects will now respond to `find_all`, which is an alias of `select`.
+* [Fixed] `RankedItem#contained_within?` will now check against all objects matching a block or hash, rather than just the first one that the document can find.
+
 ## 0.5.4 // 2016-02-08
 
 * [Fixed] `LocalFetcher` will now try the default App Store location if it can't find anything at the normal location.

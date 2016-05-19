@@ -36,6 +36,7 @@ module Rubyfocus
 				raise ArgumentError, "ItemArray#select called with #{arg.class} argument."
 			end
 		end
+		alias_method :find_all, :select
 
 		# This method should be overriden
 		def array
