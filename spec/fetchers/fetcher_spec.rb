@@ -30,8 +30,8 @@ describe Rubyfocus::Fetcher do
 	end
 
 	describe "#head" do
-	  it "should retrieve the latest patch" do
-	  	expect(@fetcher.head.to_id).to eq("jkl")
+	  it "should retrieve the ID of the latest patch" do
+	  	expect(@fetcher.head).to eq("jkl")
 	  end
 	end
 
