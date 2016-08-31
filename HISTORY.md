@@ -1,5 +1,10 @@
 # History
 
+## 0.5.6 // 2016-09-01
+
+* [New] Added `Time.safely_parse`, which will not choke on empty strings or nil values
+* [Fixed] `conditional_set` will no longer choke on empty string for times
+
 ## 0.5.5 // 2016-05-18
 
 * [Fixed] If there are no patches, `Fetcher#head`s will return the ID of the base file.

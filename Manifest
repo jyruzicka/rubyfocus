@@ -7,9 +7,9 @@
 # EXCLUDE stage_ofocus.rb
 # EXCLUDE spec/files/ofocus_staging
 
-.gitignore
-.rspec
+HISTORY.md
 lib/rubyfocus.rb
+lib/rubyfocus/core_ext.rb
 lib/rubyfocus/document.rb
 lib/rubyfocus/errors.rb
 lib/rubyfocus/fetchers/fetcher.rb
@@ -31,7 +31,6 @@ lib/rubyfocus/location.rb
 lib/rubyfocus/patch.rb
 lib/rubyfocus/review_period.rb
 lib/rubyfocus/xml_translator.rb
-Manifest
 README.md
 rubyfocus.gemspec
 version.txt

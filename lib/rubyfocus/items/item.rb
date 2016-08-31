@@ -28,8 +28,8 @@ class Rubyfocus::Item
 
 	def apply_xml(n)
 		self.id ||= n["id"] # This should not change once set!
-		conditional_set(:added, 		n.at_xpath("xmlns:added"))		{ |e| Time.parse(e) }
-		conditional_set(:modified, 	n.at_xpath("xmlns:modified"))	{ |e| Time.parse(e) }
+		conditional_set(:added, 		n.at_xpath("xmlns:added"))		{ |e| Time.safely_parse(e) }
+		conditional_set(:modified, 	n.at_xpath("xmlns:modified"))	{ |e| Time.safely_parse(e) }
 	end
 	alias_method :<<, :apply_xml
 

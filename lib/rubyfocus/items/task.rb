@@ -31,9 +31,9 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 		conditional_set(:note, 				n.at_xpath("xmlns:note"))			{ |e| e.inner_html.strip }
 		conditional_set(:order, 			n.at_xpath("xmlns:order"))		{ |e| e.inner_html.to_sym }
 		conditional_set(:flagged,			n.at_xpath("xmlns:flagged"))	{ |e| e.inner_html == "true" }
-		conditional_set(:start, 			n.at_xpath("xmlns:start"))		{ |e| Time.parse(e.inner_html) }
-		conditional_set(:due, 		 		n.at_xpath("xmlns:due"))			{ |e| Time.parse(e.inner_html) }
-		conditional_set(:completed,		n.at_xpath("xmlns:completed")){ |e| Time.parse(e.inner_html) }
+		conditional_set(:start, 			n.at_xpath("xmlns:start"))		{ |e| Time.safely_parse(e.inner_html) }
+		conditional_set(:due, 		 		n.at_xpath("xmlns:due"))			{ |e| Time.safely_parse(e.inner_html) }
+		conditional_set(:completed,		n.at_xpath("xmlns:completed")){ |e| Time.safely_parse(e.inner_html) }
 	end
 
 	# Convenience methods

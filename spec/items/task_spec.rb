@@ -15,6 +15,11 @@ describe Rubyfocus::Task do
 		  expect(@task.start).to eq(Time.utc(2014,01,01,0,0,0))
 		  expect(@task.due).to eq(Time.utc(2014,02,01,0,0,0))
     end
+
+    it "should not choke on empty string values" do
+      t = Rubyfocus::Task.new(nil, xml("task-nostart"))
+      expect(t.start).to be_nil
+    end
   end
 
   it "should set Task#flagged to false by default" do

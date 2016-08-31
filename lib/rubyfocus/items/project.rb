@@ -41,7 +41,7 @@ class Rubyfocus::Project < Rubyfocus::Task
 		p = n.at_xpath("xmlns:project")
 		conditional_set(:singleton, 			p.at_xpath("xmlns:singleton"))					{ |e| e.inner_html == "true" }
 		conditional_set(:review_interval, p.at_xpath("xmlns:review-interval") ) 	{ |e| Rubyfocus::ReviewPeriod.from_string(e.inner_html) }
-		conditional_set(:last_review, 		p.at_xpath("xmlns:last-review"))				{ |e| Time.parse e.inner_html }
+		conditional_set(:last_review, 		p.at_xpath("xmlns:last-review"))				{ |e| Time.safely_parse e.inner_html }
 		conditional_set(:status,					p.at_xpath("xmlns:status"))							{ |e| e.inner_html.to_sym }							
 	end
 
