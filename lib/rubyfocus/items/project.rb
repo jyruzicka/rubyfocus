@@ -8,7 +8,11 @@ class Rubyfocus::Project < Rubyfocus::Task
 
 	# Projects are <task>s with an interior <project> node
 	def self.matches_node?(node)
-		return (node.name == "task" && (node/"project").size > 0)
+		return (
+			node.name == "task" &&
+			(node/"project").size > 0 &&
+			(node/"project").first.children.size > 0
+		)
 	end
 	
 	# Singleton: contains one-off tasks

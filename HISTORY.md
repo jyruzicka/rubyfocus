@@ -1,5 +1,11 @@
 # History
 
+## 0.5.7 // 2016-09-02
+
+A quick fix for the new OF database format
+
+* [Fixed] Empty `<project/>` tags in a task description will no longer cause Rubyfocus to treat said task as a project.
+
 ## 0.5.6 // 2016-09-01
 
 * [New] Added `Time.safely_parse`, which will not choke on empty strings or nil values

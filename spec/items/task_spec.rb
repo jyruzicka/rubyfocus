@@ -5,6 +5,13 @@ describe Rubyfocus::Task do
 		@task = Rubyfocus::Task.new(nil, xml("task"))
 	end
 
+  describe ".matches_node?" do
+    it "should match an XML item with an empty <project /> tag" do
+      task_with_empty_project = xml("task-noproject")  
+      expect(Rubyfocus::Task.matches_node?(task_with_empty_project)).to be true
+    end
+  end
+
   describe "#initialize" do
     it "should extract relevant data from node" do
 		  expect(@task.container_id).to eq("agkBVCwMAp1")

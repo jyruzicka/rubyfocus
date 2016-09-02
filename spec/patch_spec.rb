@@ -108,7 +108,7 @@ describe Rubyfocus::Patch do
 	    Rubyfocus::Task.new(d, id: "12345")
 	    expect(d.tasks.size).to eq(1)
 
-	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="12345" op="update"><project></project></task>|))
+	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="12345" op="update"><project><last-review>2016-07-11T11:02:56.004Z</last-review></project></task>|))
 	    p.apply_to!(d)
 	    expect(d.tasks.size).to eq(0)
 	    expect(d.projects.size).to eq(1)

@@ -6,6 +6,13 @@ describe Rubyfocus::Project do
 		@last_review = Time.utc(2014,02,02,22,57,41)
 	end
 
+  describe ".matches_node?" do
+	  it "should not match an XML item with an empty <project /> tag" do
+      task_with_empty_project = xml("task-noproject")  
+      expect(Rubyfocus::Project.matches_node?(task_with_empty_project)).to be false
+    end
+  end
+
 	describe "#initialize" do
 		it "should extract relevant data from the node" do
 		  expect(@project.container_id).to eq("lZkC2HwceOc")
