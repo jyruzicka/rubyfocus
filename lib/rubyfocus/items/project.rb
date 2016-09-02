@@ -1,6 +1,5 @@
 # The project represents an OmniFocus project object.
 class Rubyfocus::Project < Rubyfocus::Task
-	# It's parseable
 	include Rubyfocus::Parser
 
 	#-------------------------------------------------------------------------------

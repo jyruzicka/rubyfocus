@@ -2,6 +2,7 @@ class Rubyfocus::RankedItem < Rubyfocus::NamedItem
 	attr_accessor :rank
 
 	# Ranked items also happen to be contained items
+	# Container setting is handled by subclasses - tasks and folders
 	idref :container
 
 	# Retrieve a full list of the parents of this item. [0] = immediate parent

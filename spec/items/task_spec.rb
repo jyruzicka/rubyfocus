@@ -27,6 +27,21 @@ describe Rubyfocus::Task do
       t = Rubyfocus::Task.new(nil, xml("task-nostart"))
       expect(t.start).to be_nil
     end
+
+    it "should ignore empty <task>s when determining container" do
+      task = Rubyfocus::Task.new(nil, xml("project-empty-task"))
+      expect(task.container_id).to eq("kJ0EtnZ5WB0")
+    end
+
+    it "should ignore empty <folder>s when determining container" do
+      task = Rubyfocus::Task.new(nil, xml("task-empty-folder"))
+      expect(task.container_id).to eq("foobar")
+    end
+
+    it "should give no container if both <folder> and <task> are empty" do
+      task = Rubyfocus::Task.new(nil, xml("task-empty-folder-project"))
+      expect(task.container_id).to be_nil
+    end
   end
 
   it "should set Task#flagged to false by default" do

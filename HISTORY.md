@@ -1,5 +1,11 @@
 # History
 
+## 0.5.8 // 2016-09-02
+
+Heading off edge cases, again a result of the new Omnifocus database format
+
+* [Fixed] Projects inside folders were being reported as having no container, due to empty `<task/`> tags. Now fixed.
+
 ## 0.5.7 // 2016-09-02
 
 A quick fix for the new OF database format

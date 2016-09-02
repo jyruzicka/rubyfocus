@@ -25,7 +25,11 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 
 	def apply_xml(n)
 		super(n)
-		conditional_set(:container_id, n.at_xpath("xmlns:task") || n.at_xpath("xmlns:project/xmlns:folder")){ |e| e["idref"] }
+
+		t = n.at_xpath("xmlns:task")
+		f = n.at_xpath("xmlns:project/xmlns:folder")
+
+		conditional_set(:container_id, (t && t["idref"]) || (f && f["idref"])){ |e| e }
 
 		conditional_set(:context_id, 	n.at_xpath("xmlns:context"))	{ |e| e["idref"] }
 		conditional_set(:note, 				n.at_xpath("xmlns:note"))			{ |e| e.inner_html.strip }
