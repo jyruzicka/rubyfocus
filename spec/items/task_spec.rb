@@ -319,11 +319,14 @@ describe Rubyfocus::Task do
 	describe "#to_project" do
 	  it "should return a project with all appropriate methods" do
 	  	now = Time.now
-	    t = Rubyfocus::Task.new(nil, {name: "Sample task", flagged: true, start: now})
+      d = Rubyfocus::Document.new
+	    t = Rubyfocus::Task.new(d, {name: "Sample task", flagged: true, start: now, id:"foobar"})
 	    p = t.to_project
 	    expect(p.name).to eq("Sample task")
+      expect(p.id).to eq("foobar")
 	    expect(p.start).to eq(now)
 	    expect(p.flagged).to be true
+      expect(p.document).to be_nil
 	  end
 	end
 end

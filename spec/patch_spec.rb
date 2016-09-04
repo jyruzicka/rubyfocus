@@ -78,7 +78,7 @@ describe Rubyfocus::Patch do
 	    expect(d.tasks.size).to eq(1)
 	  end
 
-	  it "should remove values not contained with the update" do
+	  it "should ignore values not contained within the update" do
 	    d = Rubyfocus::Document.new
 	    Rubyfocus::Task.new(d, id:"12345", name: "Test task", flagged: true)
 	    task = d.tasks.first
@@ -90,7 +90,7 @@ describe Rubyfocus::Patch do
 
 	    task = d.tasks.first
 	    expect(task.name).to eq("New test task")
-	    expect(task.flagged).to eq(false)
+	    expect(task.flagged).to eq(true)
 	  end
 
 	  it "should apply delete patches to delete things" do
@@ -127,8 +127,9 @@ describe Rubyfocus::Patch do
 
 	  it "should update elements when IDs match, even if it wants to create them" do
 	    d = Rubyfocus::Document.new
-	    Rubyfocus::Task.new(d, id: "abc123", flagged: true)
+	    Rubyfocus::Task.new(d, id: "abc123", flagged: true, name: "Bar task")
 	    expect(d.tasks.size).to eq(1)
+	    expect(d.tasks.first.name).to eq("Bar task")
 			expect(d.tasks.first.flagged).to eq(true)
 
 	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="abc123"><name>Foo task</name></task>|))
@@ -136,7 +137,7 @@ describe Rubyfocus::Patch do
 
 	    expect(d.tasks.size).to eq(1)
 	    expect(d.tasks.first.name).to eq("Foo task")
-	    expect(d.tasks.first.flagged).to eq(false)
+	    expect(d.tasks.first.flagged).to eq(true)
 	  end
 	end
 

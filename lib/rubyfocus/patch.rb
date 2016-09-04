@@ -96,25 +96,16 @@ class Rubyfocus::Patch
 	# Apply this patch to a document.
 	def apply_to!(document)
 		# Updates modify elements
-		self.update.each{ |node| update_node(document, node) }
+		self.update.each{ |node| document.update_element(node) }
 		
 		# Deletes remove elements
 		self.delete.each{ |node| document.remove_element(node["id"]) }
 
 		# Creates make new elements
-		self.create.each{ |node| update_node(document, node) }
+		self.create.each{ |node| document.update_element(node) }
 
 		# Modify current patch_id to show new value
 		document.patch_id = self.to_id
-	end
-
-	# Atomic node update code
-	def update_node(document, node)
-		# Create new element with correct ID. Then add to document, overwriting previous element(s)
-		new_node = Rubyfocus::Parser.parse(nil, node)
-		if new_node
-			document.add_element(new_node, overwrite: true)
-		end
 	end
 
 	# String representation

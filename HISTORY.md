@@ -1,5 +1,11 @@
 # History
 
+## 0.5.9 // 2016-09-04
+
+Further Omnifocus database format changes result in shennanigans with rubyfocus. All fixed.
+
+* [Fixed] Blank entries in updates are now treated as "no change", rather than "new value is nil".
+
 ## 0.5.8 // 2016-09-02
 
 Heading off edge cases, again a result of the new Omnifocus database format

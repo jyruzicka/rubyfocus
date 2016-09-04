@@ -132,10 +132,11 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 	#---------------------------------------
 	# Conversion methods
 
-	# Convert the task to a project
+	# Convert the task to a project. Does not supply a document, as this would overwrite current task
 	def to_project
-		p = Rubyfocus::Project.new(self.document)
+		p = Rubyfocus::Project.new(nil)
 		instance_variables.each do |ivar|
+			next if ivar == :"@document"
 			setter = ivar.to_s.gsub(/^@/,"") + "="
 			p.send(setter, self.instance_variable_get(ivar))	if p.respond_to?(setter)
 		end

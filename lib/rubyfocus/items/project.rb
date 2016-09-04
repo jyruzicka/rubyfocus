@@ -67,10 +67,11 @@ class Rubyfocus::Project < Rubyfocus::Task
 	def dropped?; status == :dropped; end
 
 	#---------------------------------------
-	# Convert to a task
+	# Convert to a task.  Does not supply a document, as this would overwrite current project
 	def to_task
-		t = Rubyfocus::Task.new(self.document)
+		t = Rubyfocus::Task.new(nil)
 		instance_variables.each do |ivar|
+			next if ivar == :"@document"
 			setter = ivar.to_s.gsub(/^@/,"") + "="
 			t.send(setter, self.instance_variable_get(ivar))	if t.respond_to?(setter)
 		end

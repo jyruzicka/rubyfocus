@@ -135,6 +135,38 @@ class Rubyfocus::Document
 		end
 	end
 
+	# Update an element in-place by applying xml. This method also takes into account:
+	# * new nodes (i.e. silently creates if required)
+	# * tasks upgraded to projects
+	# * projects downgraded to tasks
+	# Note that unlike add_element, this takes pure XML
+	def update_element(node)
+		element = self[node["id"]]
+
+		# Does element already exist?
+		if element
+			# Quick check: is it a task being upgraded to a project?
+			if element.class == Rubyfocus::Task && Rubyfocus::Project.matches_node?(node)
+				# Upgrade
+				new_node = element.to_project
+				new_node.apply_xml(node)
+				add_element(new_node, overwrite:true)
+			# or is the project being downgraded to a task?
+			elsif element.class == Rubyfocus::Project && !Rubyfocus::Project.matches_node?(node)
+				# Downgrade
+				new_node = element.to_task
+				new_node.apply_xml(node)
+				add_element(new_node, overwrite:true)
+			else
+				# Update in-place
+				element.apply_xml(node)
+			end
+		else
+			# Create a new node and add it
+			Rubyfocus::Parser.parse(self,node)
+		end
+	end
+
 	#-------------------------------------------------------------------------------
 	# Searchable stuff
 	def elements
