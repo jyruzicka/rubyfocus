@@ -56,7 +56,7 @@ describe Rubyfocus::Document do
     		end
 	    end
 
-	    verbosely{ d.update_element(node) }
+	    d.update_element(node)
 	    expect(d.tasks.size).to eq(0)
 	    expect(d.projects.size).to eq(1)
 	  end
