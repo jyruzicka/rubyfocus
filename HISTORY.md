@@ -1,5 +1,11 @@
 # History
 
+## 0.5.10 // 2016-09-07
+
+Continuing the long saga of bugfixes following Omnigroup's database upgrade, this update should fix the "vanishing project" bug.
+
+* [Fixed] Projects will no longer be demoted to tasks if a project patch doesn't contain a "<project>" tag.
+
 ## 0.5.9 // 2016-09-04
 
 Further Omnifocus database format changes result in shennanigans with rubyfocus. All fixed.

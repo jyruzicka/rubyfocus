@@ -2,7 +2,7 @@ require_relative "../spec_helper"
 
 describe Rubyfocus::NamedItem do
 	before(:all) do
-		@item = Rubyfocus::NamedItem.new(nil, xml("named_item"))
+		@item = Rubyfocus::NamedItem.new(nil, xml(file: "named_item"))
 	end
 
 	describe "#initialize" do

@@ -2,8 +2,8 @@ require_relative "../spec_helper"
 
 describe Rubyfocus::Folder do
 	before(:all) do
-		@folder = Rubyfocus::Folder.new(nil, xml("folder"))
-		@orphan_folder = Rubyfocus::Folder.new(nil, xml("orphan_folder"))
+		@folder = Rubyfocus::Folder.new(nil, xml(file: "folder"))
+		@orphan_folder = Rubyfocus::Folder.new(nil, xml(file: "orphan_folder"))
 	end
 
 	describe "#initialize" do

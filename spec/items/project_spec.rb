@@ -2,13 +2,13 @@ require_relative "../spec_helper"
 
 describe Rubyfocus::Project do
 	before(:all) do
-		@project = Rubyfocus::Project.new(nil, xml("project"))
+		@project = Rubyfocus::Project.new(nil, xml(file: "project"))
 		@last_review = Time.utc(2014,02,02,22,57,41)
 	end
 
   describe ".matches_node?" do
 	  it "should not match an XML item with an empty <project /> tag" do
-      task_with_empty_project = xml("task-noproject")  
+      task_with_empty_project = xml(file: "task-noproject")  
       expect(Rubyfocus::Project.matches_node?(task_with_empty_project)).to be false
     end
   end

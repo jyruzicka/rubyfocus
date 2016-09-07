@@ -3,7 +3,7 @@ require_relative "../spec_helper"
 describe Rubyfocus::Context do
 	describe "with location" do
 		before(:all) do
-			@context = Rubyfocus::Context.new(nil, xml("context-location"))
+			@context = Rubyfocus::Context.new(nil, xml(file: "context-location"))
 		end
 
   	describe "#initialize" do
@@ -21,7 +21,7 @@ describe Rubyfocus::Context do
 
   describe "with parent context" do
   	before(:all) do
-  		@context = Rubyfocus::Context.new(nil, xml("context-parent"))
+  		@context = Rubyfocus::Context.new(nil, xml(file: "context-parent"))
   	end
 
   	describe "#initialize" do

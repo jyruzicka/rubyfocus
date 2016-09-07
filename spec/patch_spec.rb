@@ -114,12 +114,23 @@ describe Rubyfocus::Patch do
 	    expect(d.projects.size).to eq(1)
 	  end
 
-	  it "should apply update patches to demote projects to tasks" do
+	  it "should apply update patches to leave projects as they are when no <project> tag is supplied" do
 	    d = Rubyfocus::Document.new
 	    Rubyfocus::Project.new(d, id: "12345")
 	    expect(d.projects.size).to eq(1)
 
 	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="12345" op="update"></task>|))
+	    p.apply_to!(d)
+	    expect(d.tasks.size).to eq(0)
+	    expect(d.projects.size).to eq(1)
+	  end
+
+	  it "should apply update patches to demote projects to tasks" do
+	    d = Rubyfocus::Document.new
+	    Rubyfocus::Project.new(d, id: "12345")
+	    expect(d.projects.size).to eq(1)
+
+	    p = Rubyfocus::Patch.from_string(nil, patch(%|<task id="12345" op="update"><project/></task>|))
 	    p.apply_to!(d)
 	    expect(d.tasks.size).to eq(1)
 	    expect(d.projects.size).to eq(0)

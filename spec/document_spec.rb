@@ -20,7 +20,7 @@ describe Rubyfocus::Document do
 	  expect(@doc["does not exist"]).to eq(nil)
 	end
 
-	describe "#add_element", focus: true do
+	describe "#add_element" do
 		it "should throw an exception if we try to add an element with a duplicate ID" do
 			expect {
 				d = Rubyfocus::Document.new
@@ -43,5 +43,22 @@ describe Rubyfocus::Document do
 			expect(d.tasks.size).to eq(1)
 			expect(d.tasks.first).to eq(t2)
 		end
+	end
+
+	describe "#update_element" do
+	  it "should update a task to a project when required", :focus do
+	    d = Rubyfocus::Document.new
+	    t = Rubyfocus::Task.new(d, id: "Sample ID")
+
+	    node = xml do
+	    	tag :task, op: "update", id: "Sample ID" do
+	    		tag(:project){ tag :folder }
+    		end
+	    end
+
+	    verbosely{ d.update_element(node) }
+	    expect(d.tasks.size).to eq(0)
+	    expect(d.projects.size).to eq(1)
+	  end
 	end
 end

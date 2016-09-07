@@ -2,12 +2,12 @@ require_relative "../spec_helper"
 
 describe Rubyfocus::Task do
 	before(:all) do
-		@task = Rubyfocus::Task.new(nil, xml("task"))
+		@task = Rubyfocus::Task.new(nil, xml(file: "task"))
 	end
 
   describe ".matches_node?" do
     it "should match an XML item with an empty <project /> tag" do
-      task_with_empty_project = xml("task-noproject")  
+      task_with_empty_project = xml(file: "task-noproject")  
       expect(Rubyfocus::Task.matches_node?(task_with_empty_project)).to be true
     end
   end
@@ -24,28 +24,28 @@ describe Rubyfocus::Task do
     end
 
     it "should not choke on empty string values" do
-      t = Rubyfocus::Task.new(nil, xml("task-nostart"))
+      t = Rubyfocus::Task.new(nil, xml(file: "task-nostart"))
       expect(t.start).to be_nil
     end
 
     it "should ignore empty <task>s when determining container" do
-      task = Rubyfocus::Task.new(nil, xml("project-empty-task"))
+      task = Rubyfocus::Task.new(nil, xml(file: "project-empty-task"))
       expect(task.container_id).to eq("kJ0EtnZ5WB0")
     end
 
     it "should ignore empty <folder>s when determining container" do
-      task = Rubyfocus::Task.new(nil, xml("task-empty-folder"))
+      task = Rubyfocus::Task.new(nil, xml(file: "task-empty-folder"))
       expect(task.container_id).to eq("foobar")
     end
 
     it "should give no container if both <folder> and <task> are empty" do
-      task = Rubyfocus::Task.new(nil, xml("task-empty-folder-project"))
+      task = Rubyfocus::Task.new(nil, xml(file: "task-empty-folder-project"))
       expect(task.container_id).to be_nil
     end
   end
 
   it "should set Task#flagged to false by default" do
-		unflagged_task = Rubyfocus::Task.new(nil, xml("task-unflagged"))
+		unflagged_task = Rubyfocus::Task.new(nil, xml(file: "task-unflagged"))
 		expect(unflagged_task.flagged).to eq(false)
   end
 

@@ -2,7 +2,7 @@ require_relative "../spec_helper"
 
 describe Rubyfocus::Item do
 	before(:all) do
-		@item = Rubyfocus::Item.new(nil, xml("item"))
+		@item = Rubyfocus::Item.new(nil, xml(file: "item"))
 		@added_at = Time.utc(2014,01, 01, 21, 15, 30)
 		@modified_at = Time.utc(2014,02, 01, 22, 30, 00)
 	end

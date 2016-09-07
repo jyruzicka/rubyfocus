@@ -1,4 +1,4 @@
-# Version: 0.5.9
+# Version: 0.5.10
 
 Rubyfocus is a one-way (read-only) ruby bridge to OmniFocus. Analyse, store, inspect, or play with your projects and tasks in OmniFocus from the comfort and flexibility of ruby!
 

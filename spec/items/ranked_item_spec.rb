@@ -2,7 +2,7 @@ require_relative "../spec_helper"
 
 describe Rubyfocus::RankedItem do
 	before(:all) do
-		@item = Rubyfocus::RankedItem.new(nil, xml("ranked_item"))
+		@item = Rubyfocus::RankedItem.new(nil, xml(file: "ranked_item"))
 	end
 
 	describe "#initialize" do
