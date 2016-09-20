@@ -2,7 +2,11 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [0.5.11] - 2016-09-20
+
+### Added
+* `Document#overwrite_element` now allows you to perform V1-style replacements to the database, if you really want to.
+* Should now be able to deal with either V1 or V2 patch files.
 
 ### Changed
 * Major changelog reformat!

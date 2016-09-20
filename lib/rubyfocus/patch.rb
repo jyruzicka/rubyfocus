@@ -11,6 +11,9 @@ class Rubyfocus::Patch
 	# The file the patch loads from
 	attr_accessor :file
 
+	# What version of patch file is this? Determined from XML file
+	attr_accessor :version
+
 	# These record the transformation in terms of patch ID values.
 	attr_accessor :from_ids, :to_id
 
@@ -59,6 +62,26 @@ class Rubyfocus::Patch
 
 		str ||= fetcher.patch(self.file)
 	  doc = Nokogiri::XML(str)
+
+	  # Root should be an <omnifocus> and have an XMLNS
+	  # XMLNS should be one of:
+	  # * http://www.omnigroup.com/namespace/OmniFocus/v1
+	  # * http://www.omnigroup.com/namespace/OmniFocus/v2
+	  omnifocus = doc.root
+	  if omnifocus.name == "omnifocus"
+	  	xmlns = omnifocus.namespace && omnifocus.namespace.href
+	  	case xmlns
+	  	when "http://www.omnigroup.com/namespace/OmniFocus/v1"
+	  		self.version = 1
+	  	when "http://www.omnigroup.com/namespace/OmniFocus/v2"
+	  		self.version = 2
+	  	else
+	  		raise ArgumentError, "Unrecognised namespace #{xmlns.inspect} for Omnifocus patch file."
+	  	end
+	  else
+	  	raise ArgumentError, "Root element should be <omnifocus>, instead was <#{omnifocus.name}>."
+		end
+
 	  doc.root.children.select{ |n| !n.text?}.each do |child|
 	  	case child["op"]
 	  	when "update"
@@ -95,8 +118,18 @@ class Rubyfocus::Patch
 
 	# Apply this patch to a document.
 	def apply_to!(document)
-		# Updates modify elements
-		self.update.each{ |node| document.update_element(node) }
+		load_data
+		
+		# Updates depend on version!
+		if version == 1
+			#V1 updates overwrite elements
+			self.update.each{ |node| document.overwrite_element(node) }
+		elsif version == 2
+			#V2 updates actually update elements
+			self.update.each{ |node| document.update_element(node) }
+		else
+			raise RuntimeError, "Cannot run updates using Version #{version.inspect} OF patches!"
+		end
 		
 		# Deletes remove elements
 		self.delete.each{ |node| document.remove_element(node["id"]) }

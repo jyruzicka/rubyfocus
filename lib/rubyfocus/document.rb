@@ -178,6 +178,21 @@ class Rubyfocus::Document
 		end
 	end
 
+	# Update an element in-place by creating a new element, deleting the old, and adding the new.
+	# This method is chiefly used for patching OF documents using V1 patches. Properties not explicitly
+	# mentioned in the patch are reverted to their default values.
+	# This method also takes into account:
+	# * new nodes (i.e. silently creates if required)
+	# * tasks upgraded to projects (if task has a <project> element)
+	# * projects downgraded to tasks (if project has no <project> element)
+	# Note that unlike add_element, this takes pure XML
+	def overwrite_element(node)
+		element = self[node["id"]]
+		self.remove_element(element) if element
+
+		Rubyfocus::Parser.parse(self, node)
+	end
+
 	#-------------------------------------------------------------------------------
 	# Searchable stuff
 	def elements

@@ -91,4 +91,52 @@ describe Rubyfocus::Document do
 	    expect(d.projects.size).to eq(0)
 	  end
 	end
+
+	describe "#overwrite_element" do
+	  it "should overwrite an element, removing old properties" do
+	    d = Rubyfocus::Document.new
+	    t = Rubyfocus::Task.new(d, id: "Sample task", name: "Foo task", flagged: true)
+
+	    node = xml do
+	    	tag :task, op: "update", id: "Sample task" do
+	    		tag(:name){ "New task" }
+	    	end
+	    end
+
+	    d.overwrite_element(node)
+	    t = d["Sample task"]
+	    expect(t.name).to eq("New task")
+	    expect(t.flagged).to eq(false)
+	  end
+
+	  it "should overwrite a task with a project when indicated" do
+			d = Rubyfocus::Document.new
+	    t = Rubyfocus::Task.new(d, id: "Sample ID")
+
+	    node = xml do
+	    	tag :task, op: "update", id: "Sample ID" do
+	    		tag(:project){ tag :folder }
+    		end
+	    end
+
+	    d.overwrite_element(node)
+	    expect(d.tasks.size).to eq(0)
+	    expect(d.projects.size).to eq(1)
+	  end
+
+	   it "should demote a project when no project tag is provided" do
+	    d = Rubyfocus::Document.new
+	    t = Rubyfocus::Project.new(d, id: "Sample ID")
+
+	    node = xml do
+	    	tag :task, op: "update", id: "Sample ID" do
+	    		tag(:name){ "Foobar" }
+    		end
+	    end
+
+	    d.overwrite_element(node)
+	    expect(d.tasks.size).to eq(1)
+	    expect(d.projects.size).to eq(0)
+	  end
+	end
 end
