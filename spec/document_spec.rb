@@ -46,7 +46,7 @@ describe Rubyfocus::Document do
 	end
 
 	describe "#update_element" do
-	  it "should update a task to a project when required", :focus do
+	  it "should update a task to a project when required" do
 	    d = Rubyfocus::Document.new
 	    t = Rubyfocus::Task.new(d, id: "Sample ID")
 
@@ -59,6 +59,36 @@ describe Rubyfocus::Document do
 	    d.update_element(node)
 	    expect(d.tasks.size).to eq(0)
 	    expect(d.projects.size).to eq(1)
+	  end
+
+	  it "should maintain a project as a project when no project tag is provided" do
+	    d = Rubyfocus::Document.new
+	    t = Rubyfocus::Project.new(d, id: "Sample ID")
+
+	    node = xml do
+	    	tag :task, op: "update", id: "Sample ID" do
+	    		tag(:name){ "Foobar" }
+    		end
+	    end
+
+	    d.update_element(node)
+	    expect(d.tasks.size).to eq(0)
+	    expect(d.projects.size).to eq(1)
+	  end
+
+	  it "should demote a project if an empty <project> tag is spotted" do
+	    d = Rubyfocus::Document.new
+	    t = Rubyfocus::Project.new(d, id: "Sample ID")
+
+	    node = xml do
+	    	tag :task, op: "update", id: "Sample ID" do
+	    		tag(:project)
+    		end
+	    end
+
+	    d.update_element(node)
+	    expect(d.tasks.size).to eq(1)
+	    expect(d.projects.size).to eq(0)
 	  end
 	end
 end
