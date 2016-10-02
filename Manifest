@@ -7,7 +7,7 @@
 # EXCLUDE stage_ofocus.rb
 # EXCLUDE spec/files/ofocus_staging
 
-HISTORY.md
+CHANGELOG.md
 lib/rubyfocus.rb
 lib/rubyfocus/core_ext.rb
 lib/rubyfocus/document.rb
