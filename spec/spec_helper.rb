@@ -63,3 +63,8 @@ def verbosely &blck
 end
 
 $verbose = false
+
+# Build a tiny webpage out of files
+def webpage(*files)
+	"<html><table>" + files.map{ |f| %|<tr><td><a href="#{f}">filename</a></td></tr>|}.join("") + "</table></html>"
+end

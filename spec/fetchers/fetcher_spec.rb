@@ -54,5 +54,10 @@ describe Rubyfocus::Fetcher do
 	    expect(@fetcher.can_patch?(nil)).to eq(false)
 	  end
 	end
-  
+
+	describe "#encrypted?" do
+	  it "should return a RuntimeError for basic fetchers" do
+	    expect{ Rubyfocus::Fetcher.new.encrypted? }.to raise_error(RuntimeError)
+	  end
+	end
 end

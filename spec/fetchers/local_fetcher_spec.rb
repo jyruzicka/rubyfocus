@@ -14,6 +14,11 @@ describe Rubyfocus::LocalFetcher do
     fetcher
   end
 
+  let(:encrypted_fetcher) do
+    fetcher = Rubyfocus::LocalFetcher.new
+    fetcher.location = File.join(SPEC_ROOT, "/files/encrypted.ofocus")
+    fetcher
+  end
 
   describe "#base" do
     it "should parse + return the contents of the base file" do
@@ -83,6 +88,14 @@ describe Rubyfocus::LocalFetcher do
 
         expect(f.location).to eq(nil)
       end
+    end
+  end
+
+  describe "#encrypted?" do
+    it "should return `true` if the file `encrypted` exists" do
+      expect(basic_fetcher).to_not be_encrypted
+      expect(advanced_fetcher).to_not be_encrypted
+      expect(encrypted_fetcher).to be_encrypted
     end
   end
 

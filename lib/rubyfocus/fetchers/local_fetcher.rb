@@ -52,6 +52,11 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 		coder.map = {"location" => @location}
 	end
 
+	# Is this fetcher fetching encrypted data?
+	def encrypted?
+		File.exists?(File.join(self.location, "encrypted"))
+	end
+
 	#---------------------------------------
 	# Location file setters and getters
 

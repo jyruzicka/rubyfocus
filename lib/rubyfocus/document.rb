@@ -70,6 +70,7 @@ class Rubyfocus::Document
 	# Use the linked fetcher to update the document
 	def update
 		if fetcher
+			raise RuntimeError, "Rubyfocus cannot currently read encrypted databases." if fetcher.encrypted?
 			fetcher.update_full(self)
 		else
 			raise RuntimeError, "Tried to update a document with no fetcher."

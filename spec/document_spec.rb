@@ -45,6 +45,23 @@ describe Rubyfocus::Document do
 		end
 	end
 
+	describe "#update" do
+	  it "should raise an error if the fetcher is encrypted" do
+	    d = Rubyfocus::Document.new
+	    f = double("Fetcher")
+	    expect(f).to receive(:encrypted?).and_return(false)
+	    expect(f).to receive(:update_full).with(d)
+	    d.fetcher = f
+	    d.update
+
+	    ef = double("Fetcher")
+	    expect(ef).to receive(:encrypted?).and_return(true)
+	    d.fetcher = ef
+
+	    expect{ d.update }.to raise_error(RuntimeError)
+	  end
+	end
+
 	describe "#update_element" do
 	  it "should update a task to a project when required" do
 	    d = Rubyfocus::Document.new

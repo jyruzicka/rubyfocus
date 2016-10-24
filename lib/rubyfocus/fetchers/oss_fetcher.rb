@@ -49,24 +49,33 @@ class Rubyfocus::OSSFetcher < Rubyfocus::Fetcher
 		end
 	end
 
-	# Fetches a list of every patch file
-	def patches
-		@patches ||= begin
+	# Fetches a list of all files contained within the database
+	def files
+		@files ||= begin
 			response = self.fetcher.get(url, digest_auth: auth).body
 			# Text is in first table, let's assume
 			table = response[/<table>(.*?)<\/table>/m,1]
 			if table
-				links = table.scan(/<a href="([^"]+)"/).flatten.select{ |f| f.end_with?(".zip") }
-				links.map{ |u| Rubyfocus::Patch.new(self,u) }
+				table.scan(/<a href="([^"]+)"/).flatten
 			else
 				[]
 			end
 		end
 	end
 
+	# Fetches a list of every patch file
+	def patches
+		@patches ||= files.select{ |f| f.end_with?(".zip") }.map{ |u| Rubyfocus::Patch.new(self,u) }
+	end
+
 	# Fetches the contents of a given patch file
 	def patch(file)
 		fetch_file(file)
+	end
+
+	# Is this encrypted?
+	def encrypted?
+		files.find{ |f| File.basename(f) == "encrypted" }
 	end
 
 	# Save to disk

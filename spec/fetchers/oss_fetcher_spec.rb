@@ -1,26 +1,34 @@
 require_relative "../spec_helper"
+
 Struct.new("Responder", :body)
 Struct.new("Fetcher", :_get){ def get(url,hsh); return _get; end }
+
+def fetcher(text)
+  fetcher = Struct::Fetcher.new(Struct::Responder.new(text))
+
+  f = Rubyfocus::OSSFetcher.new("foo", "bar")
+  f.fetcher = fetcher
+  f
+end
+
 describe Rubyfocus::OSSFetcher do
-  let(:html){ <<-end
-<html><table>
-  <tr><td><a href="20151016190000=basefile_id+basefile.zip">foo</a></td></tr>
-  <tr><td><a href="20151016190100=basefile+patch1.zip">foo</a></td></tr>
-  <tr><td><a href="20151016190200=patch1+patch2.zip">foo</a></td></tr>
-  <tr><td><a href="20151016190300=patch2+patch3.zip">foo</a></td></tr>
-</table></html>
-  end
-  }
+  let(:html){ webpage(
+    "20151016190000=basefile_id+basefile.zip",
+    "20151016190100=basefile+patch1.zip",
+    "20151016190200=patch1+patch2.zip",
+    "20151016190300=patch2+patch3.zip"
+  )}
 
-  let(:base_fetcher) {
-    r = Struct::Responder.new(html)
-    
-    fetcher = Struct::Fetcher.new(r)
+  let(:encrypted_html){ webpage(
+    "20151016190000=basefile_id+basefile.zip",
+    "20151016190100=basefile+patch1.zip",
+    "20151016190200=patch1+patch2.zip",
+    "20151016190300=patch2+patch3.zip",
+    "encrypted"
+  )}
 
-    f = Rubyfocus::OSSFetcher.new("foo", "bar")
-    f.fetcher = fetcher
-    f
-  }
+  let(:base_fetcher) { fetcher(html) }
+  let(:encrypted_fetcher){ fetcher(encrypted_html) }
 
   describe "#patches" do
     it "should return a list of files, as HTML" do
@@ -56,6 +64,13 @@ describe Rubyfocus::OSSFetcher do
       f = Rubyfocus::OSSFetcher.new("foo", "bar")
       f.fetcher = fetcher
       expect(f.patch("random")).to include(%|<?xml version="1.0" encoding="UTF-8" standalone="no"?>|)
+    end
+  end
+
+  describe "#encrypted?" do
+    it "should recognise encrypted databases by the presence of an `encrypted` file" do
+      expect(base_fetcher).to_not be_encrypted
+      expect(encrypted_fetcher).to be_encrypted   
     end
   end
 end

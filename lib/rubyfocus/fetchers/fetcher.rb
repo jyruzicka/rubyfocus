@@ -56,6 +56,11 @@ class Rubyfocus::Fetcher
 		return false
 	end
 
+	# Is this fetcher encrypted?
+	def encrypted?
+		raise RuntimeError, "Method Fetcher#encrypted? called for abstract class Fetcher."
+	end
+
 	#---------------------------------------
 	# Patching methods
 
