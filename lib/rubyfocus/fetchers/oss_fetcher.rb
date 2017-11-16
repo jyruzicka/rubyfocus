@@ -98,14 +98,14 @@ class Rubyfocus::OSSFetcher < Rubyfocus::Fetcher
 	end
 
 	def fetch_file(f)
-		f = File.join(url,f)
-		data = self.fetcher.get(f, digest_auth: auth).body
+		fq_zipfile = File.join(url,f)
+		data = self.fetcher.get(fq_zipfile, digest_auth: auth).body
 		io = StringIO.new(data)
 		Zip::InputStream.open(io) do |io|
 			while (entry = io.get_next_entry)
 				return io.read if entry.name == "contents.xml"
 			end
-			raise Rubyfocus::OSSFetcherError, "Malformed OmniFocus zip file #{zipfile}."
+			raise Rubyfocus::OSSFetcherError, "Malformed OmniFocus zip file #{fq_zipfile}."
 		end
 	end
 end
