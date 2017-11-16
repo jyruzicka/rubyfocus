@@ -1,4 +1,4 @@
-# Version: 0.5.11
+# Version: 0.5.12
 
 Rubyfocus is a one-way (read-only) ruby bridge to OmniFocus. Analyse, store, inspect, or play with your projects and tasks in OmniFocus from the comfort and flexibility of ruby!
 
@@ -22,7 +22,7 @@ Now build and install it!
 
 ```
 gem build rubyfocus.gemspec
-gem install rubyfocus-0.5.11.gem
+gem install rubyfocus-0.5.12.gem
 ```
 
 # Usage

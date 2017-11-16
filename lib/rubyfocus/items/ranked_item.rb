@@ -17,7 +17,7 @@ class Rubyfocus::RankedItem < Rubyfocus::NamedItem
 	# Is this item contained within another? You may supply an object, string or integer ID, hash of properties,
 	# or proc to run on each item.
 	def contained_within?(object)
-		if [String, Fixnum, Hash, Proc].include?(object.class)
+		if [String, Integer, Hash, Proc].include?(object.class)
 			document.find_all(object).any?{ |o|  ancestry.include?(o) }
 		else
 			ancestry.include?(object)

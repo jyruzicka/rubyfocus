@@ -9,7 +9,7 @@ module Rubyfocus
 	#
 	# 	data_store.find{ |o| o.name == "Foobard" }
 	#
-	# If you pass +find+ or +select+ a String or Fixnum, it will look for objects
+	# If you pass +find+ or +select+ a String or Integer, it will look for objects
 	# whose +id+ equals this value.
 	#
 	# You should ensure that your class' +array+ method is overwritten to point
@@ -47,7 +47,7 @@ module Rubyfocus
 		# This method determines the correct block to use in find or select operations
 		def find_select_block(arg)
 			case arg
-			when Fixnum # ID
+			when Integer # ID
 				string_id = arg.to_s
 				Proc.new{ |item| item.id == string_id }
 			when String

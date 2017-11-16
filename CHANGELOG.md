@@ -2,13 +2,14 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [0.5.12] - 2017-09-16
 
 ### Added
 * `Fetcher#encrypted?` will tell you if a fetcher is looking at an encrypted folder or not.
 
 ### Changed
 
+* Replaced references to `Fixnum` with `Integer`
 * `Document#update` will error if you try to update based on an encrypted fetcher.
 * HISTORY.md is now CHANGELOG.md
 * Reformatted Changelog to match KaC format
