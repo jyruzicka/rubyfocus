@@ -2,6 +2,12 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.13] - 2017-12-10
+
+### Changed
+
+* Updated `rubyzip` version dependency
+
 ## [0.5.12] - 2017-09-16
 
 ### Added
