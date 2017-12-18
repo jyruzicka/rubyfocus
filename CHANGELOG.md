@@ -2,6 +2,13 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.14]
+
+### Changed
+
+* Fixed a bug where Rubyfocus sometimes picks the wrong file to be the "base" file.
+* Fixed a typo.
+
 ## [0.5.13] - 2017-12-10
 
 ### Changed

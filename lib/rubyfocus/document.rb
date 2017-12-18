@@ -151,7 +151,7 @@ class Rubyfocus::Document
 			if(
 				element.class == Rubyfocus::Task &&
 				(node / "project *").size > 0
-				)
+			)
 
 				# Upgrade
 				new_node = element.to_project

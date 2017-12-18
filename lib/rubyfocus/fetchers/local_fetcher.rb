@@ -13,18 +13,18 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 	# Fetches the contents of the base file
 	def base
 		@base ||= begin
-			zip_file = Dir[File.join(self.location,"*.zip")].first
+			zip_file = Dir[File.join(self.location,"*.zip")].sort.first
 			if zip_file
 				Zip::File.open(zip_file){ |z| z.get_entry("contents.xml").get_input_stream.read }
 			else
-				raise RuntimeError, "Rubyfocs::LocalFetcher looking for zip files at #{self.location}: none found."
+				raise RuntimeError, "Rubyfocus::LocalFetcher looking for zip files at #{self.location}: none found."
 			end
 		end
 	end
 
 	# Fetches the ID Of the base file
 	def base_id
-		base_file = File.basename(Dir[File.join(self.location,"*.zip")].first)
+		base_file = File.basename(Dir[File.join(self.location,"*.zip")].sort.first)
 		if base_file =~ /^\d+\=.*\+(.*)\.zip$/
 			$1
 		else
