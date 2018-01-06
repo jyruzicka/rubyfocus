@@ -2,6 +2,12 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.15]
+
+## Changed
+
+* Fixed further bugs related to Rubyfocus' not being able to pick the base file from OmniFocus' local file store.
+
 ## [0.5.14]
 
 ### Changed

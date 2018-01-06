@@ -88,7 +88,7 @@ class Rubyfocus::Fetcher
 	# apply the latest one.
 	def next_patch(document)
 		all_possible_patches = self.patches.select{ |patch| patch.can_patch?(document) }
-		return all_possible_patches.sort.first
+		return all_possible_patches.sort.last
 	end
 
 

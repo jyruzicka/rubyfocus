@@ -24,7 +24,7 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 
 	# Fetches the ID Of the base file
 	def base_id
-		base_file = File.basename(Dir[File.join(self.location,"*.zip")].sort.first)
+		base_file = File.basename(sorted_files.first)
 		if base_file =~ /^\d+\=.*\+(.*)\.zip$/
 			$1
 		else
@@ -34,7 +34,12 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 
 	# Fetches a list of every patch file
 	def patches
-		@patches ||= Dir[File.join(self.location, "*.zip")][1..-1].map{ |f| Rubyfocus::Patch.new(self, File.basename(f)) }
+		@patches ||= sorted_files[1..-1].map{ |f| Rubyfocus::Patch.new(self, File.basename(f)) }
+	end
+
+	# Fetch a sorted list of files from this directory
+	private def sorted_files
+		@sorted_files ||= Dir[File.join(self.location, "*.zip")].sort
 	end
 
 	# Fetches the contents of a given patch file
