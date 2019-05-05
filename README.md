@@ -20,7 +20,7 @@ Now build and install it!
 
 ```
 gem build rubyfocus.gemspec
-gem install rubyfocus-0.5.15.gem
+gem install rubyfocus-0.5.16.gem
 ```
 
 # Usage

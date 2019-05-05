@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["README.md"]
 
   # Add runtime dependencies here
-  s.add_runtime_dependency "nokogiri", "~> 1.6", ">= 1.6.6"
-  s.add_runtime_dependency "rubyzip", "~> 1.2", ">= 1.2.1"
+  s.add_runtime_dependency "nokogiri", "~> 1.8", ">= 1.8.5"
+  s.add_runtime_dependency "rubyzip", "~> 1.2", ">= 1.2.2"
   s.add_runtime_dependency "httparty", "~> 0.13", ">= 0.13.7"
 end

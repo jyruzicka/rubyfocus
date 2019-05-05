@@ -48,6 +48,118 @@ describe Rubyfocus::LocalFetcher do
     end
   end
 
+  describe "#container_location" do
+    it("should select system container location by default") do
+      lf = Rubyfocus::LocalFetcher.new()
+
+      expect(lf.container_location).to eq(File.join(ENV["HOME"], "Library/Containers/"))
+    end
+
+    it("should use a custom container location when specified") do
+      lf = Rubyfocus::LocalFetcher.new()
+
+      lf.container_location = "Foobar"
+
+      expect(lf.container_location).to eq("Foobar")
+    end
+  end
+
+  describe "#default_location" do
+    context("with one default location") do
+      it("should pick the default location") do
+        lf = Rubyfocus::LocalFetcher.new()
+        lf.container_location = File.join(
+          __dir__,
+          "../files/test_library/with_one_default_location"
+        )
+
+        expect(lf.default_location).to eq(
+          File.join(
+            __dir__,
+            "../files/test_library/with_one_default_location/com.omnigroup.OmniFocus3/Data/Library/Application Support/OmniFocus/OmniFocus.ofocus"
+          )
+        )
+      end
+    end
+
+    context("with two default locations") do
+      it("should pick the latest location") do
+        lf = Rubyfocus::LocalFetcher.new()
+        lf.container_location = File.join(
+          __dir__,
+          "../files/test_library/with_two_default_locations"
+        )
+
+        expect(lf.default_location).to eq(
+          File.join(
+            __dir__,
+            "../files/test_library/with_two_default_locations/com.omnigroup.OmniFocus3/Data/Library/Application Support/OmniFocus/OmniFocus.ofocus"
+          )
+        )
+      end
+    end
+
+    context("with no default locations") do
+      it("should return a blank string") do
+        lf = Rubyfocus::LocalFetcher.new()
+        lf.container_location = File.join(
+          __dir__,
+          "../files/test_library/with_no_default_locations"
+        )
+
+        expect(lf.default_location).to eq("")
+      end
+    end
+  end
+
+  describe "#appstore_location" do
+    context("with one appstore location") do
+      it("should pick the appstore location") do
+        lf = Rubyfocus::LocalFetcher.new()
+        lf.container_location = File.join(
+          __dir__,
+          "../files/test_library/with_one_appstore_location"
+        )
+
+        expect(lf.appstore_location).to eq(
+          File.join(
+            __dir__,
+            "../files/test_library/with_one_appstore_location/com.omnigroup.OmniFocus3.MacAppStore/Data/Library/Application Support/OmniFocus/OmniFocus.ofocus"
+          )
+        )
+      end
+    end
+
+    context("with two appstore locations") do
+      it("should pick the latest location") do
+        lf = Rubyfocus::LocalFetcher.new()
+        lf.container_location = File.join(
+          __dir__,
+          "../files/test_library/with_two_appstore_locations"
+        )
+
+        expect(lf.appstore_location).to eq(
+          File.join(
+            __dir__,
+            "../files/test_library/with_two_appstore_locations/com.omnigroup.OmniFocus3.MacAppStore/Data/Library/Application Support/OmniFocus/OmniFocus.ofocus"
+          )
+        )
+      end
+    end
+
+    context("with no appstore locations") do
+      it("should return a blank string") do
+        lf = Rubyfocus::LocalFetcher.new()
+        lf.container_location = File.join(
+          __dir__,
+          "../files/test_library/with_no_appstore_locations"
+        )
+
+        expect(lf.appstore_location).to eq("")
+      end
+    end
+  end
+
   describe "#location" do
     it "should fetch the assigned location when one is set" do
       f = Rubyfocus::LocalFetcher.new

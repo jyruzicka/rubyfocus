@@ -65,18 +65,71 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 	#---------------------------------------
 	# Location file setters and getters
 
-	# Default (non app-store) file location
-	def default_location
-		@default_location ||= File.join(ENV["HOME"],
-																		"/Library/Containers/com.omnigroup.OmniFocus2",
-																		"Data/Library/Application Support/OmniFocus/OmniFocus.ofocus")
+	# Where do we expect OS X to store containers?
+	def container_location
+		@container_location ||= File.join(ENV["HOME"], "Library/Containers/")
 	end
 
-	# Default app-store file location
+	attr_writer :container_location
+
+	# Default (non app-store) file location. Will look for "com.omnigroup.Omnifocus###"
+	# (where ### is a number) and pick the most recent.
+	#
+	# If it cannot find any directories matching this pattern, will return ""
+	# (empty string). Note that File.exists?("") returns `false`.
+	def default_location
+		if @default_location.nil?
+			omnifocus_directories = Dir[File.join(container_location, "com.omnigroup.OmniFocus*")]
+
+			default_omnifocus_directories = omnifocus_directories.select{ |path|
+				File.basename(path) =~ /com\.omnigroup\.OmniFocus\d+$/
+			}
+
+			if (default_omnifocus_directories.size == 0)
+				# If none match the regexp, we return ""
+				@default_location = ""
+			else
+				# Otherwise, match highest
+				last_omnifocus_directory = default_omnifocus_directories.sort().last()
+				
+				@default_location = File.join(
+					last_omnifocus_directory,
+					"Data/Library/Application Support/OmniFocus/OmniFocus.ofocus"
+				)
+			end
+		end
+
+		return @default_location
+	end
+
+	# App store file location. Will look for "com.omnigroup.Omnifocus###.MacAppStore"
+	# (where ### is a number) and pick the most recent.
+	#
+	# If it cannot find any directories matching this pattern, will return ""
+	# (empty string). Note that File.exists?("") returns `false`.
 	def appstore_location
-		@appstore_location ||= File.join(ENV["HOME"],
-																			"/Library/Containers/com.omnigroup.OmniFocus2.MacAppStore",
-																			"Data/Library/Application Support/OmniFocus/OmniFocus.ofocus")
+		if @appstore_location.nil?
+			omnifocus_directories = Dir[File.join(container_location, "com.omnigroup.OmniFocus*")]
+
+			appstore_omnifocus_directories = omnifocus_directories.select{ |path|
+				File.basename(path) =~ /com\.omnigroup\.OmniFocus\d+\.MacAppStore$/
+			}
+
+			if (appstore_omnifocus_directories.size == 0)
+				# If none match the regexp, we return ""
+				@appstore_location = ""
+			else
+				# Otherwise, match highest
+				last_omnifocus_directory = appstore_omnifocus_directories.sort().last()
+				
+				@appstore_location = File.join(
+					last_omnifocus_directory,
+					"Data/Library/Application Support/OmniFocus/OmniFocus.ofocus"
+				)
+			end
+		end
+
+		return @appstore_location
 	end
 
 	# Determine location based on assigned and default values. Returns +nil+

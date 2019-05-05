@@ -2,9 +2,16 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.16] - 2019-04-05
+
+### Changed
+
+* Updated OmniFocus locations code, to deal with current and future versions of OmniFocus
+* Updated gem dependencies, to address security issues.
+
 ## [0.5.15]
 
-## Changed
+### Changed
 
 * Fixed further bugs related to Rubyfocus' not being able to pick the base file from OmniFocus' local file store.
 
