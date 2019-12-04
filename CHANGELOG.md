@@ -2,6 +2,15 @@
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.6.0] - 2019-12-04
+
+I guess I should bump this to 1.0.0 at some point, huh?
+
+### Added
+
+* Contexts can navigate to descendant contexts and tasks (via @johntrandall)
+* Update spec files, so that tests actually run green on computers outside my own.
+
 ## [0.5.16] - 2019-04-05
 
 ### Changed
