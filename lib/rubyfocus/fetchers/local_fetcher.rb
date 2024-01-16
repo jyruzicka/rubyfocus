@@ -45,7 +45,7 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 	# Fetches the contents of a given patch file
 	def patch(file)
 		filename = File.join(self.location, file)
-		if File.exists?(filename)
+		if File.exist?(filename)
 			Zip::File.open(filename){ |z| z.get_entry("contents.xml").get_input_stream.read }
 		else
 			raise ArgumentError, "Trying to fetch patch #{file}, but file does not exist."
@@ -59,7 +59,7 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 
 	# Is this fetcher fetching encrypted data?
 	def encrypted?
-		File.exists?(File.join(self.location, "encrypted"))
+		File.exist?(File.join(self.location, "encrypted"))
 	end
 
 	#---------------------------------------
@@ -76,7 +76,7 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 	# (where ### is a number) and pick the most recent.
 	#
 	# If it cannot find any directories matching this pattern, will return ""
-	# (empty string). Note that File.exists?("") returns `false`.
+	# (empty string). Note that File.exist?("") returns `false`.
 	def default_location
 		if @default_location.nil?
 			omnifocus_directories = Dir[File.join(container_location, "com.omnigroup.OmniFocus*")]
@@ -91,7 +91,7 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 			else
 				# Otherwise, match highest
 				last_omnifocus_directory = default_omnifocus_directories.sort().last()
-				
+
 				@default_location = File.join(
 					last_omnifocus_directory,
 					"Data/Library/Application Support/OmniFocus/OmniFocus.ofocus"
@@ -106,7 +106,7 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 	# (where ### is a number) and pick the most recent.
 	#
 	# If it cannot find any directories matching this pattern, will return ""
-	# (empty string). Note that File.exists?("") returns `false`.
+	# (empty string). Note that File.exist?("") returns `false`.
 	def appstore_location
 		if @appstore_location.nil?
 			omnifocus_directories = Dir[File.join(container_location, "com.omnigroup.OmniFocus*")]
@@ -121,7 +121,7 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 			else
 				# Otherwise, match highest
 				last_omnifocus_directory = appstore_omnifocus_directories.sort().last()
-				
+
 				@appstore_location = File.join(
 					last_omnifocus_directory,
 					"Data/Library/Application Support/OmniFocus/OmniFocus.ofocus"
@@ -137,9 +137,9 @@ class Rubyfocus::LocalFetcher < Rubyfocus::Fetcher
 	def location
 		if @location
 			@location
-		elsif File.exists?(default_location)
+		elsif File.exist?(default_location)
 			default_location
-		elsif File.exists?(appstore_location)
+		elsif File.exist?(appstore_location)
 			appstore_location
 		else
 			nil
