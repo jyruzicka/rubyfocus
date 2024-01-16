@@ -61,7 +61,7 @@ class Rubyfocus::Document
 
 	# Load from a a hash
 	def self.load_from_file(file_location)
-		d = YAML::load_file(file_location)
+		d = YAML::unsafe_load_file(file_location)
 		d.fetcher.reset
 		d
 	end
