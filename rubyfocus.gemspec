@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   
   s.author = "Jan-Yves Ruzicka"
   s.email = "jan@1klb.com"
-  s.homepage = "http://1klb.com/projects/rubyfocus/"
+  s.homepage = "https://github.com/jyruzicka/rubyfocus"
   
   s.files = File.read("Manifest").split("\n").select{ |l| !l.start_with?("#") && l != ""}
   s.require_paths << "lib"
