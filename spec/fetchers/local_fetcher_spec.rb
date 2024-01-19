@@ -2,8 +2,8 @@ require_relative "../spec_helper"
 require "tempfile"
 
 describe Rubyfocus::LocalFetcher do
-	let(:basic_fetcher) do
-		fetcher = Rubyfocus::LocalFetcher.new
+  let(:basic_fetcher) do
+    fetcher = Rubyfocus::LocalFetcher.new
     fetcher.location = File.join(SPEC_ROOT, "/files/basic.ofocus")
     fetcher
   end
@@ -22,7 +22,7 @@ describe Rubyfocus::LocalFetcher do
 
   describe "#base" do
     it "should parse + return the contents of the base file" do
-    	expect(basic_fetcher.base).to start_with(%|<?xml version="1.0" encoding="UTF-8" standalone="no"?>|)
+      expect(basic_fetcher.base).to start_with(%|<?xml version="1.0" encoding="UTF-8" standalone="no"?>|)
     end
   end
 
@@ -235,7 +235,7 @@ describe Rubyfocus::LocalFetcher do
       f.close
 
       d.save(f.path)
-      
+
       d2 = Rubyfocus::Document.load_from_file(f.path)
       expect(d2.patch_id).to eq("12RdY7iO2P")
       expect(d2.folders.first.name).to eq("Sample folder")
