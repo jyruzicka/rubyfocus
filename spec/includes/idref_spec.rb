@@ -1,24 +1,24 @@
 require_relative "../spec_helper"
 
 class IDRefTestClass
-	include Rubyfocus::IDRef
-	attr_accessor :document
-	idref :foo
+  include Rubyfocus::IDRef
+  attr_accessor :document
+  idref :foo
 end
 
 describe IDRefTestClass do
-	before(:each) do
-		@t = IDRefTestClass.new
-		@t.foo_id = "bar"
-	end
+  before(:each) do
+    @t = IDRefTestClass.new
+    @t.foo_id = "bar"
+  end
 
   it "should correctly fetch when given a document" do
-  	doc = double("document")
-  	ref = double("reference")
-  	expect(doc).to receive(:find).with("bar"){ ref }
+    doc = double("document")
+    ref = double("reference")
+    expect(doc).to receive(:find).with("bar"){ ref }
 
-  	@t.document = doc
-  	expect(@t.foo).to eq(ref)
+    @t.document = doc
+    expect(@t.foo).to eq(ref)
   end
 
   it "should return nil when it doesn't have a document" do
@@ -30,7 +30,7 @@ describe IDRefTestClass do
     expect(@s.foo).to be_nil
 
     @s.document = double("document")
-		expect(@s.foo).to be_nil    
+    expect(@s.foo).to be_nil
   end
 
   it "should allow us to set using the idless setter and an id'd object" do
