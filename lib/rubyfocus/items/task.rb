@@ -14,7 +14,7 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
   # * modified
   # * document
 
-  attr_accessor :note, :flagged, :order, :start, :due, :completed
+  attr_accessor :note, :flagged, :order, :start, :due, :completed, :repeat, :repetition_method, :repetition_rule
   idref :context
 
   def initialize(document, n=nil)
@@ -31,13 +31,19 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 
     conditional_set(:container_id, (t && t["idref"]) || (f && f["idref"])){ |e| e }
 
-    conditional_set(:context_id,   n.at_xpath("xmlns:context"))  { |e| e["idref"] }
-    conditional_set(:note,         n.at_xpath("xmlns:note"))      { |e| e.inner_html.strip }
-    conditional_set(:order,       n.at_xpath("xmlns:order"))    { |e| e.inner_html.to_sym }
-    conditional_set(:flagged,      n.at_xpath("xmlns:flagged"))  { |e| e.inner_html == "true" }
-    conditional_set(:start,       n.at_xpath("xmlns:start"))    { |e| Time.safely_parse(e.inner_html) }
-    conditional_set(:due,          n.at_xpath("xmlns:due"))      { |e| Time.safely_parse(e.inner_html) }
-    conditional_set(:completed,    n.at_xpath("xmlns:completed")){ |e| Time.safely_parse(e.inner_html) }
+    conditional_set(:context_id,        n.at_xpath("xmlns:context"))           { |e| e["idref"] }
+    conditional_set(:note,              n.at_xpath("xmlns:note"))              { |e| e.inner_html.strip }
+    conditional_set(:order,             n.at_xpath("xmlns:order"))             { |e| e.inner_html.to_sym }
+    conditional_set(:flagged,           n.at_xpath("xmlns:flagged"))           { |e| e.inner_html == "true" }
+    conditional_set(:start,             n.at_xpath("xmlns:start"))             { |e| Time.safely_parse(e.inner_html) }
+    conditional_set(:due,               n.at_xpath("xmlns:due"))               { |e| Time.safely_parse(e.inner_html) }
+    conditional_set(:completed,         n.at_xpath("xmlns:completed"))         { |e| Time.safely_parse(e.inner_html) }
+    conditional_set(:repeat,            n.at_xpath("xmlns:repeat"))            { |e| e.inner_html }
+
+    # an ICS repeat rule (see RFC2445), e.g. FREQ=WEEKLY;INTERVAL=1
+    conditional_set(:repetition_rule,   n.at_xpath("xmlns:repetition-rule"))   { |e| e.inner_html }
+    # the repeat method: fixed, start-after-completion, or due-after-completion
+    conditional_set(:repetition_method, n.at_xpath("xmlns:repetition-method")) { |e| e.inner_html }
   end
 
   # Convenience methods

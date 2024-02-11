@@ -23,6 +23,12 @@ describe Rubyfocus::Task do
       expect(@task.due).to eq(Time.utc(2014,02,01,0,0,0))
     end
 
+    it "should extract repetition data" do
+      task = Rubyfocus::Task.new(nil, xml(file: "task-repeat"))
+      expect(task.repetition_rule).to eq("FREQ=YEARLY")
+      expect(task.repetition_method).to eq("fixed")
+    end
+
     it "should not choke on empty string values" do
       t = Rubyfocus::Task.new(nil, xml(file: "task-nostart"))
       expect(t.start).to be_nil
