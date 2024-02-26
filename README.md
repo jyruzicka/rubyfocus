@@ -1,3 +1,7 @@
+**Note:** this is no longer being maintained. If you're interested in picking up maintenance, get in touch and I'll work out how I shift this over to you.
+
+---
+
 Rubyfocus is a one-way (read-only) ruby bridge to OmniFocus. Analyse, store, inspect, or play with your projects and tasks in OmniFocus from the comfort and flexibility of ruby!
 
 # Installation
